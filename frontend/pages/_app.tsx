@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { ROUTES } from "../constants/routes";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { AppProps } from "next/app";
 import { QueryClientProvider, QueryClient } from "react-query";
 import "../styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 // 1. Checks if token is available or not.
 // 2. If no token; log out!
@@ -52,14 +53,12 @@ const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <ToastContainer position="top-right" theme="light" />
-      <QueryClientProvider client={new QueryClient({})}>
-        <AuthWrapper>
-          <Component {...pageProps} />
-        </AuthWrapper>
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={new QueryClient({})}>
+      <ToastContainer position="top-right" theme="dark" />
+      <AuthWrapper>
+        <Component {...pageProps} />
+      </AuthWrapper>
+    </QueryClientProvider>
   );
 }
 

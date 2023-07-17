@@ -7,6 +7,7 @@ import PasswordField from "../fields/PasswordField";
 import { useRegisterUser } from "../../hooks/user.hooks";
 import { VerificationModal } from "../modals/verification";
 import Button from "../buttons/Button";
+import { toast } from "react-toastify";
 
 export const RegisterForm = () => {
   const { mutate: registerUser, isLoading } = useRegisterUser();
@@ -19,12 +20,14 @@ export const RegisterForm = () => {
   };
 
   const handleRegisterClick = () => {
-    setOpen(true);
-    // call register API
     registerUser({
       payload: fields,
-      callback: () => {
-        // TODO
+      callback: (isSuccess: boolean, message: string) => {
+        if (isSuccess) {
+          setOpen(true);
+        } else {
+          toast.error(message);
+        }
       },
     });
   };
