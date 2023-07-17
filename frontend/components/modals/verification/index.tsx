@@ -2,16 +2,20 @@ import { Box, Typography } from "@mui/material";
 import Modal from "..";
 import TextField from "../../fields/TextField";
 import { useState } from "react";
+import { useVerifyUser } from "../../../hooks/user.hooks";
+import { toast } from "react-toastify";
 
 interface VerifiactionModalProps {
   open: boolean;
   setOpen: (p: boolean) => void;
   email: string;
+  onSuccess?: () => void;
 }
 
 export const VerificationModal = (props: VerifiactionModalProps) => {
-  const { open, setOpen, email } = props;
+  const { open, setOpen, email, onSuccess } = props;
   const [code, setCode] = useState<number | null>(null);
+  const { mutate: verifyUser, isLoading } = useVerifyUser();
 
   const handleVerificationCode = (code: string) => {
     if (code) {
@@ -23,13 +27,31 @@ export const VerificationModal = (props: VerifiactionModalProps) => {
     }
   };
 
+  const handleVerifyUser = () => {
+    verifyUser({
+      payload: { code: code.toString(), email },
+      callback: (isSuccess, message) => {
+        if (isSuccess) {
+          toast.success("Verified Successfully.");
+          onSuccess();
+          setOpen(false);
+        } else {
+          toast.error(message);
+        }
+      },
+    });
+  };
+
   return (
     <Modal
       open={open}
       setOpen={setOpen}
       title="Email Verification"
-      onSuccess={() => {}}
+      onSuccess={handleVerifyUser}
       successBtnText="Verify"
+      isDisabled={!code}
+      isLoading={isLoading}
+      onClose={() => setCode(null)}
     >
       <Box
         display="flex"

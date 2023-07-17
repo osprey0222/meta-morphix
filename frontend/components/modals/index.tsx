@@ -20,6 +20,7 @@ const Modal = (props: ModalProps) => {
     onSuccess,
     successBtnText = "Ok",
     isDisabled = false,
+    isLoading = false,
   } = props;
   return (
     <Dialog open={open} fullWidth maxWidth="sm">
@@ -45,6 +46,7 @@ const Modal = (props: ModalProps) => {
           sx={{ width: "25%" }}
           onClick={onSuccess}
           label={successBtnText}
+          isLoading={isLoading}
         />
       </DialogActions>
     </Dialog>
@@ -60,6 +62,7 @@ interface ModalProps {
   successBtnText?: string;
   onSuccess: () => void;
   isDisabled?: boolean;
+  isLoading?: boolean;
 }
 
 export default Modal;

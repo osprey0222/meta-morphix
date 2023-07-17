@@ -1,5 +1,16 @@
-import { POST } from "./apis/apis";
+import { GET, POST } from "./apis/apis";
 import { API_ROUTES } from "../constants/routes";
+import { generateUrl } from "../utils/common";
+
+export const verifyUser = (data: VerifyUserPayload) => {
+  const url = generateUrl(API_ROUTES.verifyUser, { ...data });
+  return GET(url).then((res) => res);
+};
+
+export interface VerifyUserPayload {
+  email: string;
+  code: string;
+}
 
 export const loginUser = (data: LoginUserPayload) => {
   const url = API_ROUTES.loginUser;

@@ -96,6 +96,7 @@ export const LoginForm = () => {
         open={open}
         setOpen={(p) => setOpen(p)}
         email={fields.email}
+        onSuccess={() => router.push(ROUTES.dashboard)}
       />
     </>
   );
