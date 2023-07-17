@@ -1,9 +1,11 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import {
   LoginUserPayload,
   RegiaterUserPayload,
+  VerifyUserPayload,
   loginUser,
   registerUser,
+  verifyUser,
 } from "../services/user.services";
 import { APIError } from "../types/common.types";
 
@@ -49,6 +51,32 @@ export const useLoginUser = () => {
       onSuccess(data: LoginResponseData, variables, context) {
         variables.callback(true, "");
         localStorage.setItem("access_token", data.data.token);
+      },
+      onError(error: APIError, variables) {
+        variables.callback(
+          false,
+          (error?.response?.data?.message as string) || "Something went wrong!",
+          error?.response?.data?.status || 500
+        );
+      },
+    }
+  );
+};
+
+export const useVerifyUser = () => {
+  return useMutation(
+    ({
+      payload,
+      callback,
+    }: {
+      payload: VerifyUserPayload;
+      callback: (isSuccess: boolean, message: string, status?: number) => void;
+    }) => {
+      return verifyUser(payload);
+    },
+    {
+      onSuccess(data, variables, context) {
+        variables.callback(true, "");
       },
       onError(error: APIError, variables) {
         variables.callback(
