@@ -1,6 +1,15 @@
-import { useMutation } from "react-query";
 import { POST } from "./apis/apis";
 import { API_ROUTES } from "../constants/routes";
+
+export const loginUser = (data: LoginUserPayload) => {
+  const url = API_ROUTES.loginUser;
+  return POST(url, { data });
+};
+
+export interface LoginUserPayload {
+  email: string;
+  password: string;
+}
 
 export const registerUser = (data: RegiaterUserPayload) => {
   const url = API_ROUTES.registerUser;

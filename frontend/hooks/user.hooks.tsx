@@ -1,5 +1,10 @@
 import { useMutation } from "react-query";
-import { RegiaterUserPayload, registerUser } from "../services/user.services";
+import {
+  LoginUserPayload,
+  RegiaterUserPayload,
+  loginUser,
+  registerUser,
+} from "../services/user.services";
 import { APIError } from "../types/common.types";
 
 export const useRegisterUser = () => {
@@ -27,3 +32,38 @@ export const useRegisterUser = () => {
     }
   );
 };
+
+export const useLoginUser = () => {
+  return useMutation(
+    ({
+      payload,
+      callback,
+    }: {
+      payload: LoginUserPayload;
+      callback: (isSuccess: boolean, message: string, status?: number) => void;
+    }) => {
+      return loginUser(payload);
+    },
+
+    {
+      onSuccess(data: LoginResponseData, variables, context) {
+        variables.callback(true, "");
+        localStorage.setItem("access_token", data.data.token);
+      },
+      onError(error: APIError, variables) {
+        variables.callback(
+          false,
+          (error?.response?.data?.message as string) || "Something went wrong!",
+          error?.response?.data?.status || 500
+        );
+      },
+    }
+  );
+};
+
+interface LoginResponseData {
+  data: {
+    id: string;
+    token: string;
+  };
+}

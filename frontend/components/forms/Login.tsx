@@ -5,6 +5,9 @@ import Link from "next/link";
 import PasswordField from "../fields/PasswordField";
 import TextField from "../fields/TextField";
 import Button from "../buttons/Button";
+import { useLoginUser } from "../../hooks/user.hooks";
+import { LoginUserPayload } from "../../services/user.services";
+import { toast } from "react-toastify";
 
 export const LoginForm = () => {
   const initFields = {
@@ -14,8 +17,28 @@ export const LoginForm = () => {
     password: "",
   };
 
+  const { mutate: loginUser, isLoading } = useLoginUser();
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [fields, setFields] = useState<LoginFields>(initFields);
+  const [fields, setFields] = useState<LoginUserPayload>(initFields);
+
+  const handleLogin = () => {
+    loginUser({
+      payload: { email: fields.email, password: fields.password },
+      callback: (isSuccess: boolean, message: string, status?: number) => {
+        if (isSuccess) {
+          // redirect -> dashboard
+        } else {
+          if (status === 401) {
+            // unverified: open verification modal
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -48,7 +71,7 @@ export const LoginForm = () => {
         required
       />
 
-      <Button sx={{ my: 2 }} onClick={() => {}} label={"Login"} />
+      <Button sx={{ my: 2 }} onClick={handleLogin} label={"Login"} />
 
       <Box
         width="100%"
@@ -66,11 +89,3 @@ export const LoginForm = () => {
     </Box>
   );
 };
-
-// interfaces
-interface LoginFields {
-  fName: string;
-  lName: string;
-  email: string;
-  password: string;
-}
