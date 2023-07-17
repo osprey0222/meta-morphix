@@ -61,6 +61,10 @@ export const useLoginUser = () => {
   );
 };
 
+export const useLogoutUser = () => {
+  localStorage.setItem("access_token", "");
+};
+
 interface LoginResponseData {
   data: {
     id: string;
