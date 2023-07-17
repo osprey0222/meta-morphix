@@ -16,7 +16,7 @@ const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   // Reference: https://github.com/vercel/next.js/discussions/19911#discussioncomment-1425895
   if (typeof window !== "undefined") {
-    token = localStorage.getItem("auth_token");
+    token = localStorage.getItem("access_token");
   }
 
   // List of pages that do not require auth-token
