@@ -3,16 +3,14 @@ const {
   registerUser,
   loginUser,
   getUserInfo,
-  sendVerificationMail,
-  verifyUserEmail,
+  verifyUser,
 } = require("../controllers/userController");
 const { authorized } = require("../middlewares/authorizationMiddleware");
 
 const router = express.Router();
 
 // No authorization required.
-router.get("/user/verify", verifyUserEmail);
-router.post("/user/verify", sendVerificationMail);
+router.get("/user/verify", verifyUser);
 router.post("/user/register", registerUser);
 router.post("/user/login", loginUser);
 

@@ -10,6 +10,7 @@ const en = {
     createFail: "Unable to create user.",
     notFound: "User not found",
     incorrectPassword: "Incorrect Password",
+    incorrectCode: "Incorrect Verification Code",
     verified: "Verified successfully",
     notVerified: "User is not verified",
   },
