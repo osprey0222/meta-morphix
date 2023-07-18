@@ -1,64 +1,52 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ROUTES } from "../constants/routes";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { AppProps } from "next/app";
 import { QueryClientProvider, QueryClient } from "react-query";
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
+import { CircularProgress, CssBaseline } from "@mui/material";
 
 // 1. Checks if token is available or not.
 // 2. If no token; log out!
 const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
 
-  let token: string | null = null;
-
-  // Reference: https://github.com/vercel/next.js/discussions/19911#discussioncomment-1425895
-  if (typeof window !== "undefined") {
-    token = localStorage.getItem("access_token");
-  }
-
   // List of pages that do not require auth-token
   const isNoAuthPage =
     ROUTES.login.includes(router.pathname) ||
-    ROUTES.register.includes(router.pathname) ||
-    ROUTES.verify.includes(router.pathname);
+    ROUTES.register.includes(router.pathname);
 
   // Checks the current page and then checks the token!
   useEffect(() => {
-    // no auth required
+    const token = localStorage.getItem("access_token");
     if (isNoAuthPage) {
       if (token) {
         localStorage.setItem("auth_token", "");
       }
-    }
-    // auth required
-    else {
+    } else {
       if (!token) {
-        // redirect back to login
-        // TODO: toast message
+        toast.error("Authentication failed! Redirecting to login page.");
         router.push(ROUTES.login);
       }
     }
-  }, [isNoAuthPage, token, router]);
+  }, [isNoAuthPage, router]);
 
-  if (token || isNoAuthPage) {
-    return <>{children}</>;
-  }
-
-  // Show some message
-  return <center>Redirecting... Sit tight!</center>;
+  return <>{children}</>;
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={new QueryClient({})}>
-      <ToastContainer position="top-right" theme="dark" />
-      <AuthWrapper>
-        <Component {...pageProps} />
-      </AuthWrapper>
-    </QueryClientProvider>
+    <>
+      <QueryClientProvider client={new QueryClient({})}>
+        <CssBaseline />
+        <ToastContainer position="top-right" theme="dark" />
+        <AuthWrapper>
+          <Component {...pageProps} />
+        </AuthWrapper>
+      </QueryClientProvider>
+    </>
   );
 }
 
