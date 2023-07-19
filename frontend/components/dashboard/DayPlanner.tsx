@@ -1,18 +1,26 @@
-import { Box, Divider, Grid, Typography } from "@mui/material";
+import { Box, Chip, Divider, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import RightArrowIcon from "@mui/icons-material/ArrowRightAltRounded";
+import DoneIcon from "@mui/icons-material/DoneRounded";
+import { CheckBox } from "@mui/icons-material";
+import axios from "axios";
 
 const SmallHeading = ({
+  sx,
   bgcolor,
   color,
   value,
+  variant = "body1",
 }: {
+  sx?: any;
   bgcolor: string;
   color: string;
   value: string;
+  variant?: any;
 }) => {
   return (
     <Box
+      sx={{ ...sx }}
       display="inline-flex"
       alignItems="center"
       justifyContent="center"
@@ -21,7 +29,12 @@ const SmallHeading = ({
       bgcolor={bgcolor}
       borderRadius={1}
     >
-      <Typography fontWeight="500" color={color} align="center">
+      <Typography
+        variant={variant}
+        fontWeight="500"
+        color={color}
+        align="center"
+      >
         {value}
       </Typography>
     </Box>
@@ -31,7 +44,11 @@ const SmallHeading = ({
 const PrioritiesBlock = () => {
   return (
     <Box display="flex" flexDirection="column" mx={3}>
-      <SmallHeading value="Priorities" color="white" bgcolor="info.main" />
+      <Chip
+        size="small"
+        label="Priorities"
+        sx={{ bgcolor: "info.main", color: "white", mb: 1 }}
+      />
       <Typography mt={2}>1. LeetCode</Typography>
       <Typography>2. Algorithms</Typography>
       <Typography>3. Co-op Course Canvas</Typography>
@@ -42,7 +59,11 @@ const PrioritiesBlock = () => {
 const SidesBlock = () => {
   return (
     <Box display="flex" flexDirection="column" mx={3}>
-      <SmallHeading value="Sides" color="white" bgcolor="success.light" />
+      <Chip
+        size="small"
+        label="Sides"
+        sx={{ bgcolor: "success.main", color: "white", mb: 1 }}
+      />
       <Typography mt={2}>1. Water</Typography>
       <Typography>2. Project</Typography>
     </Box>
@@ -52,25 +73,101 @@ const SidesBlock = () => {
 const TimeTable = () => {
   const timeTable = [
     {
+      tag: { label: "Other", color: "grey.400" },
       from: "05:00",
       to: "06:00",
       info: "Get Up + walkGet Up + walkGet Up + walkGet Up + walkGet Up + walkGet Up + walk",
     },
-    { from: "06:00", to: "07:00", info: "Breakfast + Bath" },
-    { from: "07:00", to: "08:00", info: "LeetCode" },
-    { from: "08:00", to: "09:00", info: "LeetCode" },
-    { from: "09:00", to: "10:00", info: "LeetCode" },
-    { from: "10:00", to: "11:00", info: "LeetCode" },
-    { from: "11:00", to: "12:30", info: "OH" },
-    { from: "12:30", to: "14:00", info: "Break + Lunch" },
-    { from: "05:00", to: "06:00", info: "Get Up + walk" },
-    { from: "06:00", to: "07:00", info: "Breakfast + Bath" },
-    { from: "07:00", to: "08:00", info: "LeetCode" },
-    { from: "08:00", to: "09:00", info: "LeetCode" },
-    { from: "09:00", to: "10:00", info: "LeetCode" },
-    { from: "10:00", to: "11:00", info: "LeetCode" },
-    { from: "11:00", to: "12:30", info: "OH" },
-    { from: "12:30", to: "14:00", info: "Break + Lunch" },
+    {
+      tag: { label: "Other", color: "grey.400" },
+      from: "06:00",
+      to: "07:00",
+      info: "Breakfast + Bath",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "07:00",
+      to: "08:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "08:00",
+      to: "09:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "09:00",
+      to: "10:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "10:00",
+      to: "11:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "Office Hours", color: "info.light" },
+      from: "11:00",
+      to: "12:30",
+      info: "OH",
+    },
+    {
+      tag: { label: "Other", color: "grey.400" },
+      from: "12:30",
+      to: "14:00",
+      info: "Break + Lunch",
+    },
+    {
+      tag: { label: "Other", color: "grey.400" },
+      from: "05:00",
+      to: "06:00",
+      info: "Get Up + walk",
+    },
+    {
+      tag: { label: "Other", color: "grey.400" },
+      from: "06:00",
+      to: "07:00",
+      info: "Breakfast + Bath",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "07:00",
+      to: "08:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "08:00",
+      to: "09:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "09:00",
+      to: "10:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "LeetCode", color: "warning.light" },
+      from: "10:00",
+      to: "11:00",
+      info: "LeetCode",
+    },
+    {
+      tag: { label: "Other", color: "grey.400" },
+      from: "11:00",
+      to: "12:30",
+      info: "OH",
+    },
+    {
+      tag: { label: "Other", color: "grey.400" },
+      from: "12:30",
+      to: "14:00",
+      info: "Break + Lunch",
+    },
   ];
   return (
     <Box
@@ -81,38 +178,73 @@ const TimeTable = () => {
       py={1}
       overflow="scroll"
     >
-      {timeTable.map(({ from, to, info }) => (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="start"
-          border="0.5px gray solid"
-          width="95%"
-          gap={1.5}
-          mx={0.5}
-          my={0.5}
-          p={0.5}
-          px={1.5}
-          borderRadius={1}
-        >
-          <Typography>
-            {from} - {to}
-          </Typography>
-          <RightArrowIcon />
-          <Typography noWrap textOverflow="ellipsis" maxWidth={330}>
-            {info}
-          </Typography>
-        </Box>
-      ))}
+      {timeTable.map(
+        ({ from, to, info, tag: { color: tagColor, label: tagLabel } }) => (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            border="0.1px gray solid"
+            borderColor={"grey.300"}
+            width="98%"
+            mx={0.5}
+            my={0.5}
+            p={0.5}
+            px={1.5}
+            borderRadius={1}
+          >
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="start"
+              width="100%"
+              gap={1.5}
+            >
+              <DoneIcon
+                sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
+              />
+              {/* <CheckBox fontSize="small" /> */}
+              <Typography sx={{ letterSpacing: "0.5px" }}>
+                {from} - {to}
+              </Typography>
+              <RightArrowIcon sx={{ color: "grey.700" }} />
+              <Typography noWrap textOverflow="ellipsis" maxWidth={240}>
+                {info}
+              </Typography>
+            </Box>
+            <Chip
+              size="small"
+              sx={{
+                p: 0,
+                fontSize: "10px",
+                fontWeight: "bold",
+                bgcolor: tagColor,
+                color: "white",
+                height: 16,
+                borderRadius: 5,
+              }}
+              label={tagLabel}
+            />
+          </Box>
+        )
+      )}
     </Box>
   );
 };
 
 const ImpNote = () => {
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" m={1}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      m={1}
+      p={1}
+      bgcolor="#fad1d0"
+      borderRadius={3}
+    >
       <SmallHeading bgcolor="error.light" color="white" value="Important:" />
-      <Typography mx={1} align="left">
+      <Typography variant="subtitle2" mx={1} align="left">
         {
           "Co-op course Deadline Due in two weeks, do not forget to complete it before the month end"
         }
@@ -123,7 +255,7 @@ const ImpNote = () => {
 
 const DayPlanner = () => {
   return (
-    <Box width="98%" height={650}>
+    <Box height={650}>
       <Box
         display="inline-flex"
         flexDirection="column"
@@ -132,6 +264,8 @@ const DayPlanner = () => {
         py={2}
         height="100%"
         maxWidth={550}
+        borderColor="#e0e0e0"
+        bgcolor="#ffffff"
       >
         <Box
           display="flex"
