@@ -1,20 +1,21 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import DayPlanner from "../../../components/dashboard/DayPlanner";
+import TopBarComponent from "../../../components/dashboard/TopBarComponent";
+import BottomBarComponent from "../../../components/dashboard/BottomBarComponent";
 
 const dashboard = () => {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
-    // <Box>
-    <>
-      <h1>Heading</h1>
-      <p>This is the main page!</p>
-    </>
-    // </Box>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <TopBarComponent />
+      <DayPlanner />
+      <BottomBarComponent />
+    </Box>
   );
 };
 
