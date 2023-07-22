@@ -1,7 +1,7 @@
 import RightArrowIcon from "@mui/icons-material/ArrowRightAltRounded";
 import DoneIcon from "@mui/icons-material/DoneRounded";
 import { TextFieldBorderless } from "../../fields/TextField";
-import { Box, Chip, Popover, Typography } from "@mui/material";
+import { Box, Chip, Divider, Popover, Typography } from "@mui/material";
 import { TimeField } from "@mui/x-date-pickers/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -82,7 +82,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
       py={1}
       overflow="scroll"
     >
-      {(data || []).map(({ from, to, info, tag }, index) => (
+      {(data || []).map(({ from, to, info, tag, complete }, index) => (
         <Box
           display="flex"
           alignItems="center"
@@ -97,13 +97,30 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
           borderRadius={1}
         >
           <Box
+            position="relative"
             display="flex"
             alignItems="center"
             justifyContent="start"
             width="100%"
             gap={1.5}
           >
+            <Divider
+              sx={{
+                mx: 3,
+                ...(!Boolean(complete) && { display: "none" }),
+                position: "absolute",
+                width: "67%",
+                background: "gray",
+              }}
+            />
             <DoneIcon
+              onClick={() => {
+                timeTableData[index] = {
+                  ...timeTableData[index],
+                  complete: !complete,
+                };
+                setData([...timeTableData]);
+              }}
               sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
             />
             <Time /> {"-"} <Time />
@@ -128,6 +145,7 @@ interface TimeTable {
   to: Date;
   from: Date;
   tag: { color: string; label: string };
+  complete: boolean;
 }
 
 export interface TimeTableProps {

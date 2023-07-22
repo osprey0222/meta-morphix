@@ -7,6 +7,7 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // new Date(),
     to: new Date(), //new Date(),
     info: "Get Up + walkGet Up + walkGet Up + walkGet Up + walkGet Up + walkGet Up + walk",
+    complete: true,
   },
   {
     tag: { label: "Other", color: "grey.400" },
@@ -19,6 +20,7 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // "07:00",
     to: new Date(), //"08:00",
     info: "LeetCode",
+    complete: true,
   },
   {
     tag: { label: "LeetCode", color: "warning.light" },
@@ -31,12 +33,14 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // "09:00",
     to: new Date(), //"10:00",
     info: "LeetCode",
+    complete: true,
   },
   {
     tag: { label: "LeetCode", color: "warning.light" },
     from: new Date(), // "10:00",
     to: new Date(), //"11:00",
     info: "LeetCode",
+    complete: true,
   },
   {
     tag: { label: "Office Hours", color: "info.light" },
@@ -85,12 +89,14 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // "10:00",
     to: new Date(), //"11:00",
     info: "LeetCode",
+    complete: true,
   },
   {
     tag: { label: "Other", color: "grey.400" },
     from: new Date(), // "11:00",
     to: new Date(), //"12:30",
     info: "OH",
+    complete: true,
   },
   {
     tag: { label: "Other", color: "grey.400" },
