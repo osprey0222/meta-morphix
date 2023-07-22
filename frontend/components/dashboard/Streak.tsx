@@ -2,6 +2,7 @@ import { Box, Chip, Divider, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import RightArrowIcon from "@mui/icons-material/ArrowRightAltRounded";
 import DoneIcon from "@mui/icons-material/DoneRounded";
+import CrossIcon from "@mui/icons-material/CloseRounded";
 
 const TimeTable = () => {
   const timeTable = [
@@ -173,17 +174,29 @@ const TimeTable = () => {
                 px={1.5}
                 borderRadius={1}
               >
-                {[1, 2, 3, 4, 5, 6].map(() => (
-                  <DoneIcon
-                    sx={{
-                      mx: 1,
-                      // border: "1px red solid",
-                      fontSize: 25,
-                      cursor: "pointer",
-                      color: "green",
-                    }}
-                  />
-                ))}
+                {[1, 2, 3, 4, 5, 6].map((_, index) =>
+                  Math.random() < 0.8 ? (
+                    <DoneIcon
+                      sx={{
+                        mx: 1,
+                        // border: "1px red solid",
+                        fontSize: 25,
+                        cursor: "pointer",
+                        color: "green",
+                      }}
+                    />
+                  ) : (
+                    <CrossIcon
+                      sx={{
+                        mx: 1,
+                        // border: "1px red solid",
+                        fontSize: 25,
+                        cursor: "pointer",
+                        color: "red",
+                      }}
+                    />
+                  )
+                )}
               </Box>
             </Box>
           )

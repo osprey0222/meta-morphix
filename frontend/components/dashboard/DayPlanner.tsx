@@ -1,4 +1,4 @@
-import { Box, Chip, Divider, Grid, Typography } from "@mui/material";
+import { Box, Chip, Divider, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import RightArrowIcon from "@mui/icons-material/ArrowRightAltRounded";
 import DoneIcon from "@mui/icons-material/DoneRounded";
@@ -208,9 +208,17 @@ const TimeTable = () => {
                 {from} - {to}
               </Typography>
               <RightArrowIcon sx={{ color: "grey.700" }} />
-              <Typography noWrap textOverflow="ellipsis" maxWidth={240}>
+              {/* <Typography noWrap textOverflow="ellipsis" maxWidth={240}>
                 {info}
-              </Typography>
+              </Typography> */}
+              <TextField
+                variant="standard"
+                size="small"
+                InputProps={{ style: { padding: 0 }, disableUnderline: true }}
+                sx={{ input: { padding: 0 }, fontSize: "10px", p: 0 }}
+                value={info}
+                placeholder="start typing..."
+              />
             </Box>
             <Chip
               size="small"

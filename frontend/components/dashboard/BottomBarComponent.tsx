@@ -16,8 +16,29 @@ const Icon = ({ children }) => {
 const BottomBarComponent = () => {
   const cal = new CalHeatmap();
   cal.paint({
-    domain: { type: "month", padding: [0, 7, 0, 0] },
-    subDomain: { type: "day", width: 13, height: 13, radius: 1 },
+    data: {
+      source:
+        "https://raw.githubusercontent.com/vega/vega/main/docs/data/seattle-weather.csv",
+      type: "csv",
+      x: "date",
+      y: (d) => +d["temp_max"],
+      groupY: "max",
+    },
+    date: { start: new Date("2012-01-01") },
+    range: 12,
+    scale: {
+      color: {
+        type: "threshold",
+        range: ["#14432a", "#166b34", "#37a446", "#4dd05a"],
+        domain: [10, 20, 30],
+      },
+    },
+    domain: {
+      type: "month",
+      gutter: 4,
+      label: { text: "MMM", textAlign: "start", position: "top" },
+    },
+    subDomain: { type: "ghDay", radius: 2, width: 11, height: 11, gutter: 4 },
   });
 
   return (
