@@ -6,6 +6,36 @@ import {
   TextFieldVariants,
 } from "@mui/material";
 
+export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
+  const {
+    sx,
+    placeholder = "start typing...",
+    value,
+    onChange,
+    type = "string",
+  } = props;
+  return (
+    <TextField
+      variant="standard"
+      size="small"
+      type={type}
+      InputProps={{ style: { padding: 0 }, disableUnderline: true }}
+      sx={{ input: { padding: 0 }, fontSize: "10px", p: 0, ...sx }}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+    />
+  );
+};
+
+interface TextFieldBorderlessProps {
+  value: string;
+  onChange: (value: string) => void;
+  type?: string;
+  sx?: any;
+  placeholder?: string;
+}
+
 const TextFieldComp = (props: TextFieldProps) => {
   const {
     variant,
