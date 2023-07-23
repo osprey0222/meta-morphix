@@ -109,8 +109,9 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                 mx: 3,
                 ...(!Boolean(complete) && { display: "none" }),
                 position: "absolute",
-                width: "67%",
-                background: "gray",
+                width: "81%",
+                // background: ,
+                bgcolor: "grey.200",
               }}
             />
             <DoneIcon

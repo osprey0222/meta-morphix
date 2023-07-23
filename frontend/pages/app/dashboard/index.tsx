@@ -7,6 +7,7 @@ import QuoteComponent from "../../../components/dashboard/QuoteComponent";
 import { QuickNoteComponent } from "../../../components/dashboard/QuickNoteComponent";
 import Streak from "../../../components/dashboard/Streak";
 import { GratefulComponent } from "../../../components/dashboard/GratefulComponent";
+import FilesComponent from "../../../components/dashboard/FilesComponent";
 
 const dashboard = () => {
   return (
@@ -24,17 +25,24 @@ const dashboard = () => {
         justifyContent="space-between"
       >
         <DayPlanner />
-
         <Box
           display="flex"
           flexDirection="column"
-          alignItems="start"
-          justifyContent="center"
-          gap={2}
+          alignItems="center"
+          justifyContent="space-between"
+          gap={5}
         >
-          <QuickNoteComponent />
+          <Box
+            display="flex"
+            alignItems="start"
+            justifyContent="space-around"
+            gap={5}
+          >
+            <QuickNoteComponent />
+            <QuoteComponent />
+          </Box>
+          <FilesComponent />
         </Box>
-        <QuoteComponent />
         <Streak />
       </Box>
       <BottomBarComponent />

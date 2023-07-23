@@ -16,6 +16,7 @@ export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
   } = props;
   return (
     <TextField
+      fullWidth
       variant="standard"
       size="small"
       type={type}

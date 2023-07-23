@@ -28,7 +28,7 @@ export const QuickNoteComponent = () => {
           minHeight: 300,
           resize: "none",
         }}
-        defaultValue={moment().format("Do MMMM, HH:mm:ss") + "\n\n"}
+        defaultValue={moment().format("MM/DD") + "\n\n"}
       ></textarea>
     </Box>
   );
