@@ -23,6 +23,12 @@ const FilesComponent = () => {
       width={"100%"}
       height={250}
       bgcolor="#e1f1fd"
+      draggable={true}
+      // onDrag={(e) => console.log("Dragging")}
+      onDragEnter={(e) => console.log("Entered")}
+      onDragLeave={(e) => console.log("Left")}
+      onDrop={(e) => console.log("Dropped")}
+      // onDragEnter={(e) => console.log("Entered")}
     >
       <Typography color="gray">Drag & Drop</Typography>
     </Box>
