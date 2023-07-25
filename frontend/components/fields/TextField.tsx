@@ -13,6 +13,7 @@ export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
     value,
     onChange,
     type = "string",
+    underline = false,
   } = props;
   return (
     <TextField
@@ -20,7 +21,7 @@ export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
       variant="standard"
       size="small"
       type={type}
-      InputProps={{ style: { padding: 0 }, disableUnderline: true }}
+      InputProps={{ style: { padding: 0 }, disableUnderline: !underline }}
       sx={{ input: { padding: 0 }, fontSize: "10px", p: 0, ...sx }}
       value={value}
       onChange={(e) => onChange(e.target.value)}
@@ -35,6 +36,7 @@ interface TextFieldBorderlessProps {
   type?: string;
   sx?: any;
   placeholder?: string;
+  underline?: boolean;
 }
 
 const TextFieldComp = (props: TextFieldProps) => {
