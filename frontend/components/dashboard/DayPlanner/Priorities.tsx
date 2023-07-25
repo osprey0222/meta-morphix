@@ -30,8 +30,11 @@ const Priorities = (props: PrioritiesProps) => {
           <TextFieldBorderless
             value={value}
             onChange={(p) => {
-              data[index] = p;
+              let newData = [...data];
+              newData[index] = p;
+              setData(newData);
             }}
+            placeholder={`P${index + 1}`}
           />
         </Box>
       ))}
