@@ -1,13 +1,21 @@
 import RightArrowIcon from "@mui/icons-material/ArrowRightAltRounded";
 import DoneIcon from "@mui/icons-material/DoneRounded";
 import { TextFieldBorderless } from "../../fields/TextField";
-import { Box, Chip, Divider, Popover, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Divider,
+  Popover,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { TimeField } from "@mui/x-date-pickers/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import AddTagPopover from "./AddTagPopover";
+import DeleteIcon from "@mui/icons-material/DeleteRounded";
 
 const Time = () => {
   const [time, setTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
@@ -69,6 +77,8 @@ const Tag = (props: { tag: { color: string; label: string } }) => {
 
 const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
   const [data, setData] = useState<TimeTable[]>([]);
+  const [pointerEntered, setPointerEntered] = useState<number>(-1);
+
   useEffect(() => {
     setData(timeTableData || []);
   }, []);
@@ -104,7 +114,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
             width="100%"
             gap={1.5}
           >
-            <Divider
+            <Divider // strike-through
               sx={{
                 mx: 3,
                 ...(!Boolean(complete) && { display: "none" }),
@@ -114,6 +124,20 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                 bgcolor: "grey.200",
               }}
             />
+            <Tooltip title="Delete">
+              <DeleteIcon
+                sx={{
+                  position: "absolute",
+                  color: index === pointerEntered ? "error.light" : "grey.300",
+                  fontSize: 14,
+                  top: -77,
+                  right: -19,
+                  cursor: "pointer",
+                }}
+                onPointerEnter={() => setPointerEntered(index)}
+                onPointerLeave={() => setPointerEntered(-1)}
+              />
+            </Tooltip>
             <DoneIcon
               onClick={() => {
                 timeTableData[index] = {
