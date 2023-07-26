@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
+const { ObjectId } = require("mongodb");
 
 const Schema = mongoose.Schema;
 
@@ -34,6 +35,9 @@ const UserSchema = new Schema(
     verified: {
       type: Boolean,
       default: false,
+    },
+    dayPlans: {
+      type: [ObjectId],
     },
   },
   { timestamps: true, versionKey: false }
