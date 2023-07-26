@@ -15,7 +15,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import AddTagPopover from "./AddTagPopover";
-import DeleteIcon from "@mui/icons-material/DeleteRounded";
+import DeleteIcon from "@mui/icons-material/CancelRounded";
+import DeleteIcon2 from "@mui/icons-material/DeleteRounded";
 
 const Time = () => {
   const [time, setTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
@@ -124,20 +125,18 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                 bgcolor: "grey.200",
               }}
             />
-            <Tooltip title="Delete">
-              <DeleteIcon
-                sx={{
-                  position: "absolute",
-                  color: index === pointerEntered ? "error.light" : "grey.300",
-                  fontSize: 14,
-                  top: -77,
-                  right: -19,
-                  cursor: "pointer",
-                }}
-                onPointerEnter={() => setPointerEntered(index)}
-                onPointerLeave={() => setPointerEntered(-1)}
-              />
-            </Tooltip>
+            <DeleteIcon
+              sx={{
+                position: "absolute",
+                color: index === pointerEntered ? "error.light" : "grey.300",
+                fontSize: 14,
+                top: -90,
+                right: -19,
+                cursor: "pointer",
+              }}
+              onPointerEnter={() => setPointerEntered(index)}
+              onPointerLeave={() => setPointerEntered(-1)}
+            />
             <DoneIcon
               onClick={() => {
                 timeTableData[index] = {
