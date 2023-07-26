@@ -6,6 +6,7 @@ require("dotenv").config();
 
 // routers
 const userRoutes = require("./routes/userRoutes");
+const dayPlanRoutes = require("./routes/dayPlannerRoutes");
 
 // express
 const app = express();
@@ -35,3 +36,4 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 
 app.use("/users", userRoutes);
+app.use("/dayPlan", dayPlanRoutes);

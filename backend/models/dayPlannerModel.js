@@ -15,25 +15,29 @@ const DayPlannerSchema = new Schema(
     timeTable: {
       type: [
         {
-          complete: Boolean,
-          to: Date,
-          from: Date,
-          tag: ObjectId,
-          info: String,
+          complete: { type: Boolean, required: true, default: false },
+          to: { type: Date },
+          from: { type: Date },
+          tag: { type: ObjectId },
+          info: { type: String },
         },
       ],
     },
     sides: {
       type: [String],
+      default: ["", "", ""],
     },
     priorities: {
       type: [String],
+      default: ["", "", ""],
     },
     importantNote: {
       type: String,
+      default: "",
     },
     generalNote: {
       type: String,
+      default: "",
     },
   },
   { timestamps: true, versionKey: false }
