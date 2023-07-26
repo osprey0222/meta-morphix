@@ -14,6 +14,7 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // "06:00",
     to: new Date(), //"07:00",
     info: "Breakfast + Bath",
+    complete: false,
   },
   {
     tag: { label: "LeetCode", color: "warning.light" },
@@ -27,6 +28,7 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // "08:00",
     to: new Date(), //"09:00",
     info: "LeetCode",
+    complete: false,
   },
   {
     tag: { label: "LeetCode", color: "warning.light" },
@@ -47,29 +49,34 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // "11:00",
     to: new Date(), //"12:30",
     info: "OH",
+    complete: false,
   },
   {
     tag: { label: "Other", color: "grey.400" },
     from: new Date(), // "12:30",
     to: new Date(), //"14:00",
     info: "Break + Lunch",
+    complete: false,
   },
   {
     tag: { label: "Other", color: "grey.400" },
     from: new Date(), // "05:00",
     to: new Date(), //"06:00",
     info: "Get Up + walk",
+    complete: false,
   },
   {
     tag: { label: "Other", color: "grey.400" },
     from: new Date(), // "06:00",
     to: new Date(), //"07:00",
     info: "Breakfast + Bath",
+    complete: false,
   },
   {
     tag: { label: "LeetCode", color: "warning.light" },
     from: new Date(), // "07:00",
     to: new Date(), //"08:00",
+    complete: false,
     info: "LeetCode",
   },
   {
@@ -77,12 +84,14 @@ export const timeTable: TimeTableProps["data"] = [
     from: new Date(), // "08:00",
     to: new Date(), //"09:00",
     info: "LeetCode",
+    complete: false,
   },
   {
     tag: { label: "LeetCode", color: "warning.light" },
     from: new Date(), // "09:00",
     to: new Date(), //"10:00",
     info: "LeetCode",
+    complete: false,
   },
   {
     tag: { label: "LeetCode", color: "warning.light" },
@@ -90,19 +99,6 @@ export const timeTable: TimeTableProps["data"] = [
     to: new Date(), //"11:00",
     info: "LeetCode",
     complete: true,
-  },
-  {
-    tag: { label: "Other", color: "grey.400" },
-    from: new Date(), // "11:00",
-    to: new Date(), //"12:30",
-    info: "OH",
-    complete: true,
-  },
-  {
-    tag: { label: "Other", color: "grey.400" },
-    from: new Date(), // "12:30",
-    to: new Date(), //"14:00",
-    info: "Break + Lunch",
   },
 ];
 

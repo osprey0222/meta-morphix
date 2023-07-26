@@ -84,6 +84,8 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
     setData(timeTableData || []);
   }, []);
 
+  console.log(pointerEntered);
+
   return (
     <Box
       display="flex"
@@ -106,6 +108,8 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
           p={0.5}
           px={1.5}
           borderRadius={1}
+          onPointerEnter={() => setPointerEntered(index)}
+          onPointerLeave={() => setPointerEntered(-1)}
         >
           <Box
             position="relative"
@@ -121,22 +125,21 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                 ...(!Boolean(complete) && { display: "none" }),
                 position: "absolute",
                 width: "81%",
-                // background: ,
                 bgcolor: "grey.200",
               }}
             />
-            <DeleteIcon
-              sx={{
-                position: "absolute",
-                color: index === pointerEntered ? "error.light" : "grey.300",
-                fontSize: 14,
-                top: -90,
-                right: -19,
-                cursor: "pointer",
-              }}
-              onPointerEnter={() => setPointerEntered(index)}
-              onPointerLeave={() => setPointerEntered(-1)}
-            />
+            {pointerEntered === index && (
+              <DeleteIcon
+                sx={{
+                  position: "absolute",
+                  color: "error.light",
+                  fontSize: 14,
+                  top: -10,
+                  right: -18,
+                  cursor: "pointer",
+                }}
+              />
+            )}
             <DoneIcon
               onClick={() => {
                 timeTableData[index] = {
@@ -147,7 +150,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
               }}
               sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
             />
-            <Time /> {"-"} <Time />
+            <Time /> {index}.
             <RightArrowIcon sx={{ color: "grey.700" }} />
             <TextFieldBorderless
               value={info}
