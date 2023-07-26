@@ -14,6 +14,7 @@ export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
     onChange,
     type = "string",
     underline = false,
+    rows = 1,
   } = props;
   return (
     <TextField
@@ -26,6 +27,8 @@ export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
+      multiline={rows > 1}
+      rows={rows}
     />
   );
 };
@@ -37,6 +40,7 @@ interface TextFieldBorderlessProps {
   sx?: any;
   placeholder?: string;
   underline?: boolean;
+  rows?: number;
 }
 
 const TextFieldComp = (props: TextFieldProps) => {
