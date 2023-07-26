@@ -7,9 +7,7 @@ const { User } = require("../models/userModel");
 const en = require("../utils/constants");
 const { DayPlanner } = require("../models/dayPlannerModel");
 
-//  /#/dateId/importantNote
-
-// @GET
+// @GET : Only For testing
 // Get Important note for the day
 const getImportantNote = asyncHandler(async (req, res) => {
   const { dayPlanId } = req.params;
@@ -51,7 +49,55 @@ const updateImportantNote = asyncHandler(async (req, res) => {
   }
 });
 
+// @UPDATE
+// Update Important note for the day
+const updateSides = asyncHandler(async (req, res) => {
+  const { dayPlanId } = req.params;
+  const { sides } = req.body.data;
+
+  const dayPlan = await DayPlanner.findByIdAndUpdate(
+    dayPlanId,
+    { sides },
+    { new: true }
+  );
+
+  if (dayPlan) {
+    res.status(201).json({
+      status: 201,
+      message: "Side Updated Successfully",
+    });
+  } else {
+    res.status(400).json({ status: 400, message: "Invalid." });
+    throw new Error("Invalid.");
+  }
+});
+
+// @UPDATE
+// Update Important note for the day
+const updatePriorities = asyncHandler(async (req, res) => {
+  const { dayPlanId } = req.params;
+  const { priorities } = req.body.data;
+
+  const dayPlan = await DayPlanner.findByIdAndUpdate(
+    dayPlanId,
+    { priorities },
+    { new: true }
+  );
+
+  if (dayPlan) {
+    res.status(201).json({
+      status: 201,
+      message: "Priorities Updated Successfully",
+    });
+  } else {
+    res.status(400).json({ status: 400, message: "Invalid." });
+    throw new Error("Invalid.");
+  }
+});
+
 module.exports = {
   getImportantNote,
   updateImportantNote,
+  updateSides,
+  updatePriorities,
 };
