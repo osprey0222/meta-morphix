@@ -150,7 +150,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
               }}
               sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
             />
-            <Time /> {index}.
+            <Time /> {"-"} <Time />
             <RightArrowIcon sx={{ color: "grey.700" }} />
             <TextFieldBorderless
               value={info}
