@@ -55,46 +55,34 @@ const postTT = asyncHandler(async (req, res) => {
       message: "Posted new TT.",
     });
   } else {
-    // res.status(400).json({ status: 400, message: "Somthing went wrong." });
+    res.status(400).json({ status: 400, message: "Somthing went wrong." });
   }
 });
 
 // @DELETE
 // Delete Timetable
-const deleteTimeTable = asyncHandler(async (req, res) => {
-  const { dateISO } = req.params;
+const deleteTT = asyncHandler(async (req, res) => {
+  const { dayPlanId, TT_index } = req.params;
+  const dayPlan = await DayPlanner.findById(dayPlanId);
 
-  if (!isDateValid(dateISO)) {
-    res.status(400).json({ status: 400, message: "Invalid Date" });
-  }
+  if (dayPlan) {
+    const currTT = dayPlan.timeTable;
+    currTT.splice(TT_index, 1);
 
-  let dayPlan = await DayPlanner.findOne({ date: dateISO });
+    dayPlan.timeTable = currTT;
+    dayPlan.save();
 
-  if (!dayPlan) {
-    // to date data found: create new
-    // default: to: 08:00; from: 09:00
-    dayPlan = await DayPlanner.create({
-      date: dateISO,
-      timeTable: [
-        {
-          to: moment(dateISO + "08:00", "YYYY-MM-DDHH:mm").toISOString(),
-          from: moment(dateISO + "09:00", "YYYY-MM-DDHH:mm").toISOString(),
-        },
-        {
-          to: moment(dateISO + "09:00", "YYYY-MM-DDHH:mm").toISOString(),
-          from: moment(dateISO + "10:00", "YYYY-MM-DDHH:mm").toISOString(),
-        },
-        {
-          to: moment(dateISO + "10:00", "YYYY-MM-DDHH:mm").toISOString(),
-          from: moment(dateISO + "11:00", "YYYY-MM-DDHH:mm").toISOString(),
-        },
-      ],
+    res.status(200).json({
+      status: 200,
+      data: dayPlan.timeTable,
+      message: "Deleted TT entry.",
     });
+  } else {
+    res.status(400).json({ status: 400, message: "Somthing went wrong." });
   }
-
-  res.status(200).json({ status: 200, data: dayPlan, message: "Fetched " });
 });
 
 module.exports = {
   postTT,
+  deleteTT,
 };
