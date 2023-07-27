@@ -13,7 +13,7 @@ import { TimeField } from "@mui/x-date-pickers/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddTagPopover from "./AddTagPopover";
 import DeleteIcon from "@mui/icons-material/CancelRounded";
 import DeleteIcon2 from "@mui/icons-material/DeleteRounded";
@@ -80,8 +80,14 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
   const [data, setData] = useState<TimeTable[]>([]);
   const [pointerEntered, setPointerEntered] = useState<number>(-1);
 
+  const divRef = useRef(null);
+
   useEffect(() => {
     setData(timeTableData || []);
+  }, []);
+
+  useEffect(() => {
+    divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   console.log(pointerEntered);
@@ -163,6 +169,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
           </Box>
         </Box>
       ))}
+      <div ref={divRef} />;
     </Box>
   );
 };

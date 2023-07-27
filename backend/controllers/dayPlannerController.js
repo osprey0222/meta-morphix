@@ -1,11 +1,7 @@
-const mongoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
-const { User } = require("../models/userModel");
-const en = require("../utils/constants");
 const { DayPlanner } = require("../models/dayPlannerModel");
+const { isDateValid } = require("../utils/utils");
+const moment = require("moment");
 
 // @GET : Only For testing
 // Get Important note for the day
@@ -15,7 +11,7 @@ const getImportantNote = asyncHandler(async (req, res) => {
     "importantNote"
   );
 
-  if (importantNote) {
+  if (importantNote === "" || importantNote) {
     res.status(200).json({
       status: 200,
       data: importantNote,
@@ -24,6 +20,35 @@ const getImportantNote = asyncHandler(async (req, res) => {
   } else {
     res.status(400).json({ status: 400, message: "Somthing went wrong." });
   }
+});
+
+// @GET
+// Get Day Planner : everything!
+// "create" if date not exists else "return data"
+const getDayPlanner = asyncHandler(async (req, res) => {
+  const { dateISO } = req.params;
+
+  if (!isDateValid(dateISO)) {
+    res.status(400).json({ status: 400, message: "Invalid Date" });
+  }
+
+  let dayPlan = await DayPlanner.findOne({ date: dateISO });
+
+  if (!dayPlan) {
+    // to date data found: create new
+    // default: to: 08:00; from: 09:00
+    dayPlan = await DayPlanner.create({
+      date: dateISO,
+      timeTable: [
+        {
+          to: moment(dateISO + "08:00", "YYYY-MM-DDHH:mm").toISOString(),
+          from: moment(dateISO + "09:00", "YYYY-MM-DDHH:mm").toISOString(),
+        },
+      ],
+    });
+  }
+
+  res.status(200).json({ status: 200, data: dayPlan, message: "Fetched " });
 });
 
 // @UPDATE
@@ -96,6 +121,7 @@ const updatePriorities = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getDayPlanner,
   getImportantNote,
   updateImportantNote,
   updateSides,
