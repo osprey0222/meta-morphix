@@ -10,7 +10,7 @@ const { authorized } = require("../middlewares/authorizationMiddleware");
 const {
   postTT,
   deleteTT,
-  updateTTInfo,
+  updateTT,
 } = require("../controllers/timeTableController");
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.patch("/:dayPlanId/priorities", updatePriorities);
 
 // TT
 router.post("/:dayPlanId/TT", postTT);
-router.patch("/:dayPlanId/TT/:TT_index", updateTTInfo);
+router.patch("/:dayPlanId/TT/:TT_index", updateTT);
 router.delete("/:dayPlanId/TT/:TT_index", deleteTT);
 
 module.exports = router;

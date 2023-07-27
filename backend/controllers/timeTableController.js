@@ -5,13 +5,15 @@ const moment = require("moment");
 
 // @UPDATE
 // Update TT entry info
-const updateTTInfo = asyncHandler(async (req, res) => {
+const updateTT = asyncHandler(async (req, res) => {
   const { dayPlanId, TT_index } = req.params;
-  const { info } = req.body.data;
+  const { update } = req.body.data;
   const dayPlan = await DayPlanner.findById(dayPlanId);
 
   if (dayPlan) {
-    dayPlan.timeTable[TT_index].info = info;
+    const curr = dayPlan.timeTable[TT_index].toJSON();
+
+    dayPlan.timeTable[TT_index] = { ...curr, ...update };
     dayPlan.save();
 
     res.status(201).json({
@@ -83,6 +85,6 @@ const deleteTT = asyncHandler(async (req, res) => {
 
 module.exports = {
   postTT,
-  updateTTInfo,
+  updateTT,
   deleteTT,
 };
