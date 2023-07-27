@@ -20,9 +20,7 @@ const DayPlannerSchema = new Schema(
       required: true,
       unique: true,
     },
-    timeTable: {
-      type: [TimeTableSchema],
-    },
+    timeTable: { type: [TimeTableSchema] },
     sides: {
       type: [String],
       default: ["", "", ""],

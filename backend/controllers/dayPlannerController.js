@@ -44,6 +44,14 @@ const getDayPlanner = asyncHandler(async (req, res) => {
           to: moment(dateISO + "08:00", "YYYY-MM-DDHH:mm").toISOString(),
           from: moment(dateISO + "09:00", "YYYY-MM-DDHH:mm").toISOString(),
         },
+        {
+          to: moment(dateISO + "09:00", "YYYY-MM-DDHH:mm").toISOString(),
+          from: moment(dateISO + "10:00", "YYYY-MM-DDHH:mm").toISOString(),
+        },
+        {
+          to: moment(dateISO + "10:00", "YYYY-MM-DDHH:mm").toISOString(),
+          from: moment(dateISO + "11:00", "YYYY-MM-DDHH:mm").toISOString(),
+        },
       ],
     });
   }
