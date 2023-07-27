@@ -7,7 +7,11 @@ const {
   getDayPlanner,
 } = require("../controllers/dayPlannerController");
 const { authorized } = require("../middlewares/authorizationMiddleware");
-const { postTT, deleteTT } = require("../controllers/timeTableController");
+const {
+  postTT,
+  deleteTT,
+  updateTTInfo,
+} = require("../controllers/timeTableController");
 
 const router = express.Router();
 
@@ -19,6 +23,7 @@ router.patch("/:dayPlanId/priorities", updatePriorities);
 
 // TT
 router.post("/:dayPlanId/TT", postTT);
+router.patch("/:dayPlanId/TT/:TT_index", updateTTInfo);
 router.delete("/:dayPlanId/TT/:TT_index", deleteTT);
 
 module.exports = router;

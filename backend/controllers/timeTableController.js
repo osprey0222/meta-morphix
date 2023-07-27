@@ -4,21 +4,20 @@ const { isDateValid } = require("../utils/utils");
 const moment = require("moment");
 
 // @UPDATE
-// Update Important note for the day
-const updateSides = asyncHandler(async (req, res) => {
-  const { dayPlanId } = req.params;
-  const { sides } = req.body.data;
-
-  const dayPlan = await DayPlanner.findByIdAndUpdate(
-    dayPlanId,
-    { sides },
-    { new: true }
-  );
+// Update TT entry info
+const updateTTInfo = asyncHandler(async (req, res) => {
+  const { dayPlanId, TT_index } = req.params;
+  const { info } = req.body.data;
+  const dayPlan = await DayPlanner.findById(dayPlanId);
 
   if (dayPlan) {
+    dayPlan.timeTable[TT_index].info = info;
+    dayPlan.save();
+
     res.status(201).json({
       status: 201,
-      message: "Side Updated Successfully",
+      data: dayPlan.timeTable,
+      message: "TT Info Updated Successfully",
     });
   } else {
     res.status(400).json({ status: 400, message: "Invalid." });
@@ -84,5 +83,6 @@ const deleteTT = asyncHandler(async (req, res) => {
 
 module.exports = {
   postTT,
+  updateTTInfo,
   deleteTT,
 };
