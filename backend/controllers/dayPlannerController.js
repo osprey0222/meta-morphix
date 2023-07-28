@@ -56,6 +56,7 @@ const getDayPlanner = asyncHandler(async (req, res) => {
     });
     // Adding to current user
     req.user.dayPlans.push(dayPlan.id);
+    req.user.save();
   }
 
   res.status(200).json({ status: 200, data: dayPlan, message: "Fetched " });

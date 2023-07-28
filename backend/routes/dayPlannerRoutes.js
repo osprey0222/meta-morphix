@@ -15,7 +15,7 @@ const {
 
 const router = express.Router();
 
-router.get("/:dateISO", getDayPlanner);
+router.get("/:dateISO", authorized, getDayPlanner);
 router.get("/:dayPlanId/importantNote", getImportantNote);
 router.patch("/:dayPlanId/importantNote", updateImportantNote);
 router.patch("/:dayPlanId/sides", updateSides);
