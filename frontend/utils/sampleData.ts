@@ -120,6 +120,23 @@ export const tags: any = [
       "OtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOther",
     color: "grey.400",
   },
+  {
+    label: "LeetCode",
+    color: "warning.light",
+  },
+  {
+    label: "Office Hours",
+    color: "info.light",
+  },
+  {
+    label: "Other",
+    color: "grey.400",
+  },
+  {
+    label:
+      "OtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOtherOther",
+    color: "grey.400",
+  },
 ];
 
 export const colors: any = [

@@ -16,7 +16,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useRef, useState } from "react";
 import AddTagPopover from "./AddTagPopover";
 import DeleteIcon from "@mui/icons-material/CancelRounded";
-import DeleteIcon2 from "@mui/icons-material/DeleteRounded";
+import AddIcon from "@mui/icons-material/AddCircleOutlineRounded";
 
 const Time = () => {
   const [time, setTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
@@ -49,6 +49,7 @@ const Tag = (props: { tag: { color: string; label: string } }) => {
     tag: { color: tagColor, label: tagLabel },
   } = props;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedTag, setSelectedTag] = useState(null);
 
   return (
     <>
@@ -68,10 +69,15 @@ const Tag = (props: { tag: { color: string; label: string } }) => {
         label={tagLabel}
         clickable={true}
         onClick={(e) => {
+          setSelectedTag({ label: tagLabel, color: tagColor });
           setAnchorEl(anchorEl ? null : e.currentTarget);
         }}
       />
-      <AddTagPopover anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <AddTagPopover
+        selectedTag={selectedTag}
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+      />
     </>
   );
 };
@@ -90,87 +96,88 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  console.log(pointerEntered);
-
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      m={1}
-      py={1}
-      overflow="scroll"
-    >
-      {(data || []).map(({ from, to, info, tag, complete }, index) => (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          border="0.1px gray solid"
-          borderColor={"grey.300"}
-          width="98%"
-          mx={0.5}
-          my={0.5}
-          p={0.5}
-          px={1.5}
-          borderRadius={1}
-          onPointerEnter={() => setPointerEntered(index)}
-          onPointerLeave={() => setPointerEntered(-1)}
-        >
+    <>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        mx={1}
+        pt={1}
+        overflow="scroll"
+      >
+        {(data || []).map(({ from, to, info, tag, complete }, index) => (
           <Box
-            position="relative"
             display="flex"
             alignItems="center"
-            justifyContent="start"
-            width="100%"
-            gap={1.5}
+            justifyContent="space-between"
+            border="0.1px gray solid"
+            borderColor={"grey.300"}
+            width="98%"
+            mx={0.5}
+            my={0.5}
+            p={0.5}
+            px={1.5}
+            borderRadius={1}
+            onPointerEnter={() => setPointerEntered(index)}
+            onPointerLeave={() => setPointerEntered(-1)}
           >
-            <Divider // strike-through
-              sx={{
-                mx: 3,
-                ...(!Boolean(complete) && { display: "none" }),
-                position: "absolute",
-                width: "81%",
-                bgcolor: "grey.200",
-              }}
-            />
-            {pointerEntered === index && (
-              <DeleteIcon
+            <Box
+              position="relative"
+              display="flex"
+              alignItems="center"
+              justifyContent="start"
+              width="100%"
+              gap={1.5}
+            >
+              <Divider // strike-through
                 sx={{
+                  mx: 3,
+                  ...(!Boolean(complete) && { display: "none" }),
                   position: "absolute",
-                  color: "error.light",
-                  fontSize: 14,
-                  top: -10,
-                  right: -18,
-                  cursor: "pointer",
+                  width: "81%",
+                  bgcolor: "grey.200",
                 }}
               />
-            )}
-            <DoneIcon
-              onClick={() => {
-                timeTableData[index] = {
-                  ...timeTableData[index],
-                  complete: !complete,
-                };
-                setData([...timeTableData]);
-              }}
-              sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
-            />
-            <Time /> {"-"} <Time />
-            <RightArrowIcon sx={{ color: "grey.700" }} />
-            <TextFieldBorderless
-              value={info}
-              onChange={(p: string) => {
-                timeTableData[index] = { ...timeTableData[index], info: p };
-                setData([...timeTableData]);
-              }}
-            />
-            <Tag tag={tag} />
+              {pointerEntered === index && (
+                <DeleteIcon
+                  sx={{
+                    position: "absolute",
+                    color: "error.light",
+                    fontSize: 14,
+                    top: -10,
+                    right: -18,
+                    cursor: "pointer",
+                  }}
+                />
+              )}
+              <DoneIcon
+                onClick={() => {
+                  timeTableData[index] = {
+                    ...timeTableData[index],
+                    complete: !complete,
+                  };
+                  setData([...timeTableData]);
+                }}
+                sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
+              />
+              <Time /> {"-"} <Time />
+              <RightArrowIcon sx={{ color: "grey.700" }} />
+              <TextFieldBorderless
+                value={info}
+                onChange={(p: string) => {
+                  timeTableData[index] = { ...timeTableData[index], info: p };
+                  setData([...timeTableData]);
+                }}
+              />
+              <Tag tag={tag} />
+            </Box>
           </Box>
-        </Box>
-      ))}
-      <div ref={divRef} />;
-    </Box>
+        ))}
+        <AddIcon sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }} />
+        <div ref={divRef} />
+      </Box>
+    </>
   );
 };
 

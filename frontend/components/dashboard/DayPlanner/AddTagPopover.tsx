@@ -1,20 +1,32 @@
 import { TextFieldBorderless } from "../../fields/TextField";
-import { Box, Chip, Popover, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Chip, Divider, Popover, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import { colors, tags } from "../../../utils/sampleData";
 import AddIcon from "@mui/icons-material/AddCircleRounded";
 import DotIcon from "@mui/icons-material/FiberManualRecordRounded";
 
 const AddTagPopover = (props: AddTagPopoverProps) => {
-  const { anchorEl, setAnchorEl } = props;
-  const [newTag, setNewTag] = useState({ label: "", color: "success.light" });
+  const { selectedTag, anchorEl, setAnchorEl } = props;
+  const [newTag, setNewTag] = useState(
+    selectedTag || { label: "", color: "success.light" }
+  );
   const [anchorElColors, setAnchorElColors] = useState(null);
 
   const [data, setData] = useState<{ color: string; label: string }[]>();
 
+  const divRef = useRef(null);
+
   useEffect(() => {
     setData(tags);
   }, []);
+
+  const scrollToBottom = () => {
+    divRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    // scrollToBottom();
+  }, [data]);
 
   return (
     <>
@@ -31,106 +43,111 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
           horizontal: "left",
         }}
       >
-        <Box display="flex" flexDirection="column" alignItems="center">
+        {selectedTag ? (
           <Box
-            width="80%"
-            // border="1px red solid"
-            m={1}
+            width="100%"
             display="flex"
             alignItems="center"
             justifyContent="center"
-            borderColor="grey.300"
-            borderRadius={4}
+            p={0.5}
+            border="1px solid"
+            borderColor="grey.100"
           >
             <Chip
-              size="small"
-              label="Tags"
+              size="medium"
               sx={{
-                bgcolor: "transparent",
-                color: "grey.600",
-                fontSize: 15,
-                my: 1.5,
-              }}
-            />
-          </Box>
-
-          <Box
-            px={5}
-            display="flex"
-            flexDirection="column"
-            alignItems="start"
-            maxHeight={200}
-            overflow="scroll"
-          >
-            {(data || []).map(({ color, label }, index) => {
-              return (
-                <Chip
-                  size="medium"
-                  sx={{
-                    my: 0.5,
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                    bgcolor: color,
-                    color: "white",
-                    borderRadius: 5,
-                    cursor: "pointer",
-                    maxWidth: 150,
-                  }}
-                  label={Number(index) + 1 + " - " + label}
-                />
-              );
-            })}
-          </Box>
-
-          <Box
-            my={1}
-            px={1}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <TextFieldBorderless
-              sx={{
-                mx: 0.5,
-                my: 1,
-                p: 1,
-                border: "1px  solid",
-                borderColor: "grey.300",
-                borderRadius: 3,
-                bgcolor: newTag.color,
-                input: {
-                  p: 0,
-                  m: 0,
-                  textAlign: "center",
-                  fontSize: 15,
-                  fontWeight: 500,
-                  color: "white",
-                },
-              }}
-              value={newTag.label}
-              onChange={(p) => setNewTag({ ...newTag, label: p })}
-              placeholder="Add new tag..."
-            />
-            <DotIcon
-              onClick={(e) => setAnchorElColors(e.currentTarget)}
-              sx={{ color: newTag.color, cursor: "pointer", mx: 0.5 }}
-            />
-            <AddIcon
-              onClick={
-                newTag.label
-                  ? () => {
-                      setData([...data, newTag]);
-                      setNewTag({ ...newTag, label: "" });
-                    }
-                  : null
-              }
-              sx={{
+                my: 0.5,
+                fontWeight: "bold",
+                bgcolor: selectedTag.color,
+                color: "white",
+                borderRadius: 5,
                 cursor: "pointer",
-                mx: 0.5,
-                color: newTag.label ? "grey.600" : "grey.300",
               }}
+              onDelete={() => setNewTag(null)}
+              label={selectedTag.label}
             />
           </Box>
+        ) : (
+          <></>
+        )}
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="start"
+          maxHeight={200}
+          overflow="scroll"
+          px={3}
+          m={1}
+        >
+          {(data || []).map(({ color, label }, index) => {
+            return (
+              <Chip
+                size="medium"
+                sx={{
+                  my: 0.5,
+                  // fontSize: "12px",
+                  fontWeight: "bold",
+                  bgcolor: color,
+                  color: "white",
+                  borderRadius: 5,
+                  cursor: "pointer",
+                  maxWidth: 150,
+                }}
+                label={Number(index) + 1 + " - " + label}
+              />
+            );
+          })}
+          <div ref={divRef} />
+        </Box>
+
+        <Box
+          my={1}
+          px={1}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <TextFieldBorderless
+            sx={{
+              mx: 0.5,
+              my: 1,
+              p: 1,
+              border: "1px  solid",
+              borderColor: "grey.300",
+              borderRadius: 3,
+              bgcolor: newTag?.color || "success.light",
+              input: {
+                p: 0,
+                m: 0,
+                textAlign: "center",
+                fontSize: 15,
+                fontWeight: 500,
+                color: "white",
+              },
+            }}
+            value={newTag?.label || ""}
+            onChange={(p) => setNewTag({ ...newTag, label: p })}
+            placeholder="Add new tag..."
+          />
+          <DotIcon
+            onClick={(e) => setAnchorElColors(e.currentTarget)}
+            sx={{ color: newTag.color, cursor: "pointer", mx: 0.5 }}
+          />
+          <AddIcon
+            onClick={
+              newTag.label
+                ? () => {
+                    setData([...data, newTag]);
+                    setNewTag({ ...newTag, label: "" });
+                  }
+                : null
+            }
+            sx={{
+              cursor: "pointer",
+              mx: 0.5,
+              color: newTag.label ? "grey.600" : "grey.300",
+            }}
+          />
         </Box>
       </Popover>
 
@@ -163,6 +180,7 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
 export default AddTagPopover;
 
 interface AddTagPopoverProps {
+  selectedTag: { label: string; color: string };
   anchorEl: any;
   setAnchorEl: (p: any) => void;
 }
