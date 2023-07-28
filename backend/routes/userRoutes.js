@@ -24,6 +24,6 @@ router.get("/user", authorized, getUserInfo);
 
 router.get("/user/tags", authorized, getTags);
 router.post("/user/tags", authorized, postTag);
-router.delete("/user/tags/:tagId", authorized, deleteTag);
+router.delete("/user/tags", authorized, deleteTag);
 
 module.exports = router;

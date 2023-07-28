@@ -5,6 +5,21 @@ const { ObjectId } = require("mongodb");
 
 const Schema = mongoose.Schema;
 
+const Tag = new Schema(
+  {
+    label: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    color: {
+      type: String,
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
 const UserSchema = new Schema(
   {
     fName: {
@@ -41,7 +56,7 @@ const UserSchema = new Schema(
       default: [],
     },
     tags: {
-      type: [ObjectId],
+      type: [Tag],
       default: [],
     },
   },

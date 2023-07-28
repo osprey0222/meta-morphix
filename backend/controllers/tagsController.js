@@ -9,50 +9,45 @@ const { default: mongoose } = require("mongoose");
 // @GET : Get All Tags
 // Get
 const getTags = asyncHandler(async (req, res) => {
-  const tagIds = req.user.tags;
-
-  if (tagIds) {
-    const tags = await Tags.find({ _id: { $in: tagIds } }).select(
-      "label color"
-    );
-
-    res.status(200).json({
-      status: 200,
-      data: tags,
-      message: "Fetched.",
-    });
-  } else {
-    res.status(400).json({ status: 400, message: "Somthing went wrong." });
-  }
+  res.status(200).json({
+    status: 200,
+    data: req.user,
+    message: "Fetched.",
+  });
 });
 
 // @CREATE : Create new Tag
 // Create
 const postTag = asyncHandler(async (req, res) => {
   const { label, color } = req.body.data;
-  const tag = await Tags.create({ label, color });
 
-  if (tag) {
-    req.user.tags.push(tag.id);
+  if (req.user.tags.length < 10) {
+    const index = req.user.tags.findIndex((p) => p.label === label);
+    if (index !== -1) {
+      res.status(400).json({ status: 400, message: "Tag Already Exists" });
+      return;
+    }
+
+    req.user.tags.push({ label, color });
     req.user.save();
 
     res.status(200).json({
       status: 200,
-      data: tag,
+      data: req.user.tags,
       message: "Posted new Tag.",
     });
   } else {
-    res.status(400).json({ status: 400, message: "Somthing went wrong." });
+    res.status(400).json({ status: 400, message: "Too many tags." });
   }
 });
 
 // @DELETE
 // Delete Tag
 const deleteTag = asyncHandler(async (req, res) => {
-  const { tagId: id } = req.params;
+  const { label } = req.body.data;
 
   const tags = req.user.tags;
-  const index = tags.indexOf(id);
+  const index = req.user.tags.findIndex((p) => p.label === label);
 
   if (index < 0) {
     res.status(404).json({ status: 404, message: "Not found." });
@@ -63,17 +58,11 @@ const deleteTag = asyncHandler(async (req, res) => {
   req.user.tags = tags;
   req.user.save();
 
-  const deleted = await Tags.findOneAndDelete({ _id: id });
-
-  if (deleted) {
-    res.status(200).json({
-      status: 200,
-      data: deleted,
-      message: "Deleted.",
-    });
-  } else {
-    res.status(400).json({ status: 400, message: "Somthing went wrong." });
-  }
+  res.status(200).json({
+    status: 200,
+    data: req.user.tags,
+    message: "Deleted.",
+  });
 });
 
 module.exports = {
