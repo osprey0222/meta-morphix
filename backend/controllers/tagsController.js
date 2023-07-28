@@ -2,34 +2,24 @@ const asyncHandler = require("express-async-handler");
 const { DayPlanner } = require("../models/dayPlannerModel");
 const { isDateValid } = require("../utils/utils");
 const moment = require("moment");
+const { Tags } = require("../models/tagsModel");
+const { ObjectId } = require("mongodb");
+const { default: mongoose } = require("mongoose");
 
 // @GET : Get All Tags
 // Get
 const getTags = asyncHandler(async (req, res) => {
-  const {  } = req.params;
-  const dayPlan = await DayPlanner.findById(dayPlanId);
+  const tagIds = req.user.tags;
 
-  if (dayPlan) {
-    const currTT = dayPlan.timeTable;
+  if (tagIds) {
+    const tags = await Tags.find({ _id: { $in: tagIds } }).select(
+      "label color"
+    );
 
-    let to;
-    let from;
-
-    if (currTT.length === 0) {
-      to = moment(dayPlan.date + "08:00", "YYYY-MM-DDHH:mm").toISOString();
-      from = moment(dayPlan.date + "09:00", "YYYY-MM-DDHH:mm").toISOString();
-    } else {
-      const { to: to_, from: from_ } = currTT[currTT.length - 1];
-      to = moment(to_).add(1, "hour").toISOString();
-      from = moment(from_).add(1, "hour").toISOString();
-    }
-
-    dayPlan.timeTable = [...currTT, { to, from }];
-    dayPlan.save();
     res.status(200).json({
       status: 200,
-      data: dayPlan.timeTable,
-      message: "Posted new TT.",
+      data: tags,
+      message: "Fetched.",
     });
   } else {
     res.status(400).json({ status: 400, message: "Somthing went wrong." });
@@ -38,31 +28,18 @@ const getTags = asyncHandler(async (req, res) => {
 
 // @CREATE : Create new Tag
 // Create
-const postTT = asyncHandler(async (req, res) => {
-  const { dayPlanId } = req.params;
-  const dayPlan = await DayPlanner.findById(dayPlanId);
+const postTag = asyncHandler(async (req, res) => {
+  const { label, color } = req.body.data;
+  const tag = await Tags.create({ label, color });
 
-  if (dayPlan) {
-    const currTT = dayPlan.timeTable;
+  if (tag) {
+    req.user.tags.push(tag.id);
+    req.user.save();
 
-    let to;
-    let from;
-
-    if (currTT.length === 0) {
-      to = moment(dayPlan.date + "08:00", "YYYY-MM-DDHH:mm").toISOString();
-      from = moment(dayPlan.date + "09:00", "YYYY-MM-DDHH:mm").toISOString();
-    } else {
-      const { to: to_, from: from_ } = currTT[currTT.length - 1];
-      to = moment(to_).add(1, "hour").toISOString();
-      from = moment(from_).add(1, "hour").toISOString();
-    }
-
-    dayPlan.timeTable = [...currTT, { to, from }];
-    dayPlan.save();
     res.status(200).json({
       status: 200,
-      data: dayPlan.timeTable,
-      message: "Posted new TT.",
+      data: tag,
+      message: "Posted new Tag.",
     });
   } else {
     res.status(400).json({ status: 400, message: "Somthing went wrong." });
@@ -71,21 +48,28 @@ const postTT = asyncHandler(async (req, res) => {
 
 // @DELETE
 // Delete Tag
-const deleteTT = asyncHandler(async (req, res) => {
-  const { dayPlanId, TT_index } = req.params;
-  const dayPlan = await DayPlanner.findById(dayPlanId);
+const deleteTag = asyncHandler(async (req, res) => {
+  const { tagId: id } = req.params;
 
-  if (dayPlan) {
-    const currTT = dayPlan.timeTable;
-    currTT.splice(TT_index, 1);
+  const tags = req.user.tags;
+  const index = tags.indexOf(id);
 
-    dayPlan.timeTable = currTT;
-    dayPlan.save();
+  if (index < 0) {
+    res.status(404).json({ status: 404, message: "Not found." });
+    return;
+  }
 
+  tags.splice(index, 1);
+  req.user.tags = tags;
+  req.user.save();
+
+  const deleted = await Tags.findOneAndDelete({ _id: id });
+
+  if (deleted) {
     res.status(200).json({
       status: 200,
-      data: dayPlan.timeTable,
-      message: "Deleted TT entry.",
+      data: deleted,
+      message: "Deleted.",
     });
   } else {
     res.status(400).json({ status: 400, message: "Somthing went wrong." });
@@ -93,7 +77,7 @@ const deleteTT = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  postTT,
-  updateTT,
-  deleteTT,
+  postTag,
+  deleteTag,
+  getTags,
 };

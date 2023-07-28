@@ -6,6 +6,11 @@ const {
   verifyUser,
 } = require("../controllers/userController");
 const { authorized } = require("../middlewares/authorizationMiddleware");
+const {
+  getTags,
+  postTag,
+  deleteTag,
+} = require("../controllers/tagsController");
 
 const router = express.Router();
 
@@ -16,5 +21,9 @@ router.post("/user/login", loginUser);
 
 // Authorization required; to access data.
 router.get("/user", authorized, getUserInfo);
+
+router.get("/user/tags", authorized, getTags);
+router.post("/user/tags", authorized, postTag);
+router.delete("/user/tags/:tagId", authorized, deleteTag);
 
 module.exports = router;

@@ -6,7 +6,6 @@ const TagsSchema = new Schema(
     label: {
       type: String,
       required: true,
-      unique: true,
     },
     color: {
       type: String,
