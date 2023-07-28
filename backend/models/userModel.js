@@ -38,6 +38,11 @@ const UserSchema = new Schema(
     },
     dayPlans: {
       type: [ObjectId],
+      default: [],
+    },
+    tags: {
+      type: [ObjectId],
+      default: [],
     },
   },
   { timestamps: true, versionKey: false }
