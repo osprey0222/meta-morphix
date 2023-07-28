@@ -44,12 +44,15 @@ const Time = () => {
   );
 };
 
-const Tag = (props: { tag: { color: string; label: string } }) => {
+const Tag = (props: {
+  TT_index: number;
+  tag: { color: string; label: string };
+}) => {
   const {
+    TT_index,
     tag: { color: tagColor, label: tagLabel },
   } = props;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedTag, setSelectedTag] = useState(null);
 
   return (
     <>
@@ -69,12 +72,12 @@ const Tag = (props: { tag: { color: string; label: string } }) => {
         label={tagLabel}
         clickable={true}
         onClick={(e) => {
-          setSelectedTag({ label: tagLabel, color: tagColor });
           setAnchorEl(anchorEl ? null : e.currentTarget);
         }}
       />
       <AddTagPopover
-        selectedTag={selectedTag}
+        TT_index={TT_index}
+        tag={{ label: tagLabel, color: tagColor }}
         anchorEl={anchorEl}
         setAnchorEl={setAnchorEl}
       />
@@ -170,7 +173,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                   setData([...timeTableData]);
                 }}
               />
-              <Tag tag={tag} />
+              <Tag TT_index={index} tag={tag} />
             </Box>
           </Box>
         ))}

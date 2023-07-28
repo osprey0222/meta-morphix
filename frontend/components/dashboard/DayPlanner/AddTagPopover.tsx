@@ -6,10 +6,9 @@ import AddIcon from "@mui/icons-material/AddCircleRounded";
 import DotIcon from "@mui/icons-material/FiberManualRecordRounded";
 
 const AddTagPopover = (props: AddTagPopoverProps) => {
-  const { selectedTag, anchorEl, setAnchorEl } = props;
-  const [newTag, setNewTag] = useState(
-    selectedTag || { label: "", color: "success.light" }
-  );
+  const { tag, TT_index: index, anchorEl, setAnchorEl } = props;
+  const [selectedTag, setSelectedTag] = useState(tag);
+  const [newTag, setNewTag] = useState({ label: "", color: "success.light" });
   const [anchorElColors, setAnchorElColors] = useState(null);
 
   const [data, setData] = useState<{ color: string; label: string }[]>();
@@ -17,6 +16,7 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
   const divRef = useRef(null);
 
   useEffect(() => {
+    setSelectedTag(tag);
     setData(tags);
   }, []);
 
@@ -25,7 +25,7 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
   };
 
   useEffect(() => {
-    // scrollToBottom();
+    scrollToBottom();
   }, [data]);
 
   return (
@@ -33,7 +33,10 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
+        onClose={() => {
+          console.log("API hit", index, selectedTag);
+          setAnchorEl(null);
+        }}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",
@@ -43,16 +46,16 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
           horizontal: "left",
         }}
       >
-        {selectedTag ? (
-          <Box
-            width="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            p={0.5}
-            border="1px solid"
-            borderColor="grey.100"
-          >
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          p={0.5}
+          border="1px solid"
+          borderColor="grey.100"
+        >
+          {selectedTag ? (
             <Chip
               size="medium"
               sx={{
@@ -62,14 +65,22 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
                 color: "white",
                 borderRadius: 5,
                 cursor: "pointer",
+                maxWidth: 200,
               }}
-              onDelete={() => setNewTag(null)}
+              onDelete={() => setSelectedTag(null)}
               label={selectedTag.label}
             />
-          </Box>
-        ) : (
-          <></>
-        )}
+          ) : (
+            <Typography
+              sx={{ alignSelf: "center" }}
+              variant="caption"
+              color="grey.600"
+            >
+              Nothing selected
+            </Typography>
+          )}
+        </Box>
+
         <Box
           display="flex"
           flexDirection="column"
@@ -94,6 +105,7 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
                   maxWidth: 150,
                 }}
                 label={Number(index) + 1 + " - " + label}
+                onClick={() => setSelectedTag({ label, color })}
               />
             );
           })}
@@ -115,7 +127,7 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
               border: "1px  solid",
               borderColor: "grey.300",
               borderRadius: 3,
-              bgcolor: newTag?.color || "success.light",
+              bgcolor: newTag.color,
               input: {
                 p: 0,
                 m: 0,
@@ -125,7 +137,7 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
                 color: "white",
               },
             }}
-            value={newTag?.label || ""}
+            value={newTag.label}
             onChange={(p) => setNewTag({ ...newTag, label: p })}
             placeholder="Add new tag..."
           />
@@ -180,7 +192,8 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
 export default AddTagPopover;
 
 interface AddTagPopoverProps {
-  selectedTag: { label: string; color: string };
+  TT_index: number;
+  tag: { label: string; color: string };
   anchorEl: any;
   setAnchorEl: (p: any) => void;
 }
