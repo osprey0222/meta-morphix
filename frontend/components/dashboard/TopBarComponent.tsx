@@ -10,12 +10,9 @@ import LogoutIcon from "@mui/icons-material/LogoutRounded";
 import { useRouter } from "next/router";
 import { ROUTES } from "../../constants/routes";
 
-const Icon = ({ children }) => {
-  return <Box>{children}</Box>;
-};
-
 const TopBarComponent = () => {
   const router = useRouter();
+  const { dateISO } = router.query;
   return (
     <Grid
       width="98%"
@@ -41,7 +38,7 @@ const TopBarComponent = () => {
           <LeftIcon sx={{ fontSize: 50, cursor: "pointer" }} />
           <DoubleLeftIcon sx={{ fontSize: 50, cursor: "pointer" }} />
           <Typography mx={4} variant="h2">
-            {moment().format("Do MMMM, dddd")}
+            {moment(dateISO).format("Do MMMM, dddd")}
           </Typography>
           <DoubleRightIcon sx={{ fontSize: 50, cursor: "pointer" }} />
           <RightIcon sx={{ fontSize: 50, cursor: "pointer" }} />

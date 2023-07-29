@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import { VerificationModal } from "../modals/verification";
 import { useRouter } from "next/router";
 import { ROUTES } from "../../constants/routes";
+import { generateUrl } from "../../utils/common";
+import moment from "moment";
 
 export const LoginForm = () => {
   const { mutate: loginUser, isLoading } = useLoginUser();
@@ -26,7 +28,11 @@ export const LoginForm = () => {
       payload: { email: fields.email, password: fields.password },
       callback: (isSuccess: boolean, message: string, status?: number) => {
         if (isSuccess) {
-          router.push(ROUTES.dashboard);
+          router.push(
+            generateUrl(ROUTES.dashboard, {
+              dateISO: moment().format("YYYY-MM-DD"),
+            })
+          );
         } else {
           if (status === 401) {
             setOpen(true);
@@ -96,7 +102,13 @@ export const LoginForm = () => {
         open={open}
         setOpen={(p) => setOpen(p)}
         email={fields.email}
-        onSuccess={() => router.push(ROUTES.dashboard)}
+        onSuccess={() =>
+          router.push(
+            generateUrl(ROUTES.dashboard, {
+              dateISO: moment().format("YYYY-MM-DD"),
+            })
+          )
+        }
       />
     </>
   );
