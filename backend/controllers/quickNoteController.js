@@ -24,8 +24,8 @@ const getQuickNote = asyncHandler(async (req, res) => {
   }
 });
 
-// @CREATE : Create new Timetable entry
-// Create
+// @UPDATE : Create new Timetable entry
+// Update
 const updateQuickNote = asyncHandler(async (req, res) => {
   const { dayPlanId } = req.params;
   const dayPlan = await DayPlanner.findById(dayPlanId);

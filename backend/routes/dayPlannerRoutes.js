@@ -16,14 +16,14 @@ const {
 const router = express.Router();
 
 router.get("/:dateISO", authorized, getDayPlanner);
-router.get("/:dayPlanId/importantNote", getImportantNote);
-router.patch("/:dayPlanId/importantNote", updateImportantNote);
-router.patch("/:dayPlanId/sides", updateSides);
-router.patch("/:dayPlanId/priorities", updatePriorities);
+router.get("/:dayPlanId/importantNote", authorized, getImportantNote);
+router.patch("/:dayPlanId/importantNote", authorized, updateImportantNote);
+router.patch("/:dayPlanId/sides", authorized, updateSides);
+router.patch("/:dayPlanId/priorities", authorized, updatePriorities);
 
 // TT
-router.post("/:dayPlanId/TT", postTT);
-router.patch("/:dayPlanId/TT/:TT_index", updateTT);
-router.delete("/:dayPlanId/TT/:TT_index", deleteTT);
+router.post("/:dayPlanId/TT", authorized, postTT);
+router.patch("/:dayPlanId/TT/:TT_index", authorized, updateTT);
+router.delete("/:dayPlanId/TT/:TT_index", authorized, deleteTT);
 
 module.exports = router;
