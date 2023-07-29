@@ -71,9 +71,7 @@ const Tag = (props: {
         }}
         label={tagLabel}
         clickable={true}
-        onClick={(e) => {
-          setAnchorEl(anchorEl ? null : e.currentTarget);
-        }}
+        onClick={(e) => setAnchorEl(anchorEl ? null : e.currentTarget)}
       />
       <AddTagPopover
         TT_index={TT_index}

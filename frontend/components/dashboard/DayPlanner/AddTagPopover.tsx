@@ -12,6 +12,7 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
   const [anchorElColors, setAnchorElColors] = useState(null);
 
   const [data, setData] = useState<{ color: string; label: string }[]>();
+  const [showDelete, setShowDelete] = useState(-1);
 
   const divRef = useRef(null);
 
@@ -103,9 +104,17 @@ const AddTagPopover = (props: AddTagPopoverProps) => {
                   borderRadius: 5,
                   cursor: "pointer",
                   maxWidth: 150,
+                  "& .MuiChip-deleteIcon": {
+                    ...(showDelete !== index && { display: "none" }),
+                    fontSize: 15,
+                  },
+                  "&:hover": {},
                 }}
                 label={Number(index) + 1 + " - " + label}
                 onClick={() => setSelectedTag({ label, color })}
+                onDelete={() => {}}
+                onPointerEnter={() => setShowDelete(index)}
+                onPointerLeave={() => setShowDelete(-1)}
               />
             );
           })}
