@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import AddTagPopover from "./AddTagPopover";
 import DeleteIcon from "@mui/icons-material/CancelRounded";
 import AddIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import { TimeTable } from "../../../types/dayPlanner.types";
 
 const Time = () => {
   const [time, setTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
@@ -107,7 +108,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
         pt={1}
         overflow="scroll"
       >
-        {(data || []).map(({ from, to, info, tag, complete }, index) => (
+        {(data || []).map(({ from, to, tag = null, info, complete }, index) => (
           <Box
             display="flex"
             alignItems="center"
@@ -171,7 +172,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                   setData([...timeTableData]);
                 }}
               />
-              <Tag TT_index={index} tag={tag} />
+              {tag && <Tag TT_index={index} tag={tag} />}
             </Box>
           </Box>
         ))}
@@ -181,14 +182,6 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
     </>
   );
 };
-
-interface TimeTable {
-  info: string;
-  to: Date;
-  from: Date;
-  tag: { color: string; label: string };
-  complete: boolean;
-}
 
 export interface TimeTableProps {
   data: TimeTable[];

@@ -2,12 +2,13 @@ import { Box, Chip } from "@mui/material";
 import { TextFieldBorderless } from "../../fields/TextField";
 import { useEffect, useState } from "react";
 
-const ImportantNote = () => {
+const ImportantNote = (props: ImportantNoteProps) => {
+  const { note: initData } = props;
   const [note, setNote] = useState("");
 
   useEffect(() => {
-    setNote("");
-  }, []);
+    setNote(initData);
+  }, [initData]);
 
   return (
     <Box

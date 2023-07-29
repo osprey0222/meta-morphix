@@ -4,6 +4,7 @@ export const API_ROUTES = {
   loginUser: "/users/user/login",
   verifyUser: "/users/user/verify?email=:email&code=:code",
   // dayplanner
+  getDayPlanner: "/dayPlan/:dateISO",
   getImpNote: "/dayPlan/:dayPlanId/importantNote",
   updateImpNote: "dayPlan/:dayPlanId/importantNote",
 };

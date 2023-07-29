@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 
 const Sides = (props: SidesProps) => {
   const { data: initData } = props;
-
   const [data, setData] = useState<string[]>();
 
   useEffect(() => {
     setData(initData);
-  }, []);
+  }, [initData]);
 
   return (
     <Box display="flex" flexDirection="column" mx={3}>

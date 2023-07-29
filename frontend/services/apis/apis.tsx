@@ -1,9 +1,12 @@
 import axios, { AxiosHeaders } from "axios";
 
+const test_token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzU2YzJlZTUyNGUzMDNmOTMzODgyNCIsImlhdCI6MTY5MDY2MDgwNCwiZXhwIjoxNjkzMjUyODA0fQ.v_dS9SacBEVh6atQQIbhoIYQNOrQXR7YXPGRj5GPdd0";
+
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   headers: {
-    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    Authorization: `Bearer ${test_token}`,
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "*",
   },

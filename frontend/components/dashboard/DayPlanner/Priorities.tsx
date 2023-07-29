@@ -9,7 +9,7 @@ const Priorities = (props: PrioritiesProps) => {
 
   useEffect(() => {
     setData(initData);
-  }, []);
+  }, [initData]);
 
   return (
     <Box display="flex" flexDirection="column" mx={3}>

@@ -2,12 +2,19 @@ import { Box, Chip, Divider, Typography } from "@mui/material";
 import React from "react";
 import TimeTable from "./TimeTable";
 import { timeTable } from "../../../utils/sampleData";
-import { TextFieldBorderless } from "../../fields/TextField";
 import Sides from "./Sides";
 import Priorities from "./Priorities";
 import ImportantNote from "./ImportantNote";
+import { useRouter } from "next/router";
+import { useGetDayPlanner } from "../../../hooks/dayPlanner.hooks";
 
 const DayPlanner = () => {
+  const router = useRouter();
+  const { dateISO } = router.query;
+  const { data } = useGetDayPlanner(dateISO as string);
+
+  const { timeTable, importantNote, priorities, sides } = data;
+
   return (
     <Box height={650}>
       <Box
@@ -27,12 +34,12 @@ const DayPlanner = () => {
           justifyContent="space-evenly"
           m={1}
         >
-          <Priorities data={["LeetCode", "Algorithms", "Co-op Course"]} />
+          <Priorities data={priorities} />
           <Divider orientation="vertical" variant="middle" flexItem />
-          <Sides data={["Water", "Project", "Something"]} />
+          <Sides data={sides} />
         </Box>
         <Divider variant="middle" sx={{ my: 1 }} />
-        <ImportantNote />
+        <ImportantNote note={importantNote} />
         <Divider flexItem variant="middle" sx={{ my: 1 }}>
           <Typography fontSize="small" color="GrayText">
             Time Table
