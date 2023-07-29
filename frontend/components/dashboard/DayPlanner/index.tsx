@@ -5,7 +5,7 @@ import { timeTable } from "../../../utils/sampleData";
 import { TextFieldBorderless } from "../../fields/TextField";
 import Sides from "./Sides";
 import Priorities from "./Priorities";
-import ImportantNote from "./ImportantNode";
+import ImportantNote from "./ImportantNote";
 
 const DayPlanner = () => {
   return (
@@ -32,7 +32,7 @@ const DayPlanner = () => {
           <Sides data={["Water", "Project", "Something"]} />
         </Box>
         <Divider variant="middle" sx={{ my: 1 }} />
-        <ImportantNote note="Co-op course Deadline Due in two weeks, do not forget to complete it before the month end" />
+        <ImportantNote />
         <Divider flexItem variant="middle" sx={{ my: 1 }}>
           <Typography fontSize="small" color="GrayText">
             Time Table

@@ -8,6 +8,7 @@ import {
   verifyUser,
 } from "../services/user.services";
 import { APIError } from "../types/common.types";
+import moment from "moment";
 
 export const useRegisterUser = () => {
   return useMutation(
@@ -51,6 +52,7 @@ export const useLoginUser = () => {
       onSuccess(data: LoginResponseData, variables, context) {
         variables.callback(true, "");
         localStorage.setItem("access_token", data.data.token);
+        localStorage.setItem("curr_date_iso", moment().format("YYYY-MM-DD"));
       },
       onError(error: APIError, variables) {
         variables.callback(

@@ -6,10 +6,12 @@ import BottomBarComponent from "../../../components/dashboard/BottomBarComponent
 import QuoteComponent from "../../../components/dashboard/QuoteComponent";
 import { QuickNoteComponent } from "../../../components/dashboard/QuickNoteComponent";
 import Streak from "../../../components/dashboard/Streak";
-import { GratefulComponent } from "../../../components/dashboard/GratefulComponent";
 import FilesComponent from "../../../components/dashboard/FilesComponent";
 
 const dashboard = () => {
+  // curr_date_iso
+  useEffect(() => {}, []);
+
   return (
     <Box
       display="flex"

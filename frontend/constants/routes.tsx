@@ -1,7 +1,11 @@
 export const API_ROUTES = {
+  // User
   registerUser: "/users/user/register",
   loginUser: "/users/user/login",
   verifyUser: "/users/user/verify?email=:email&code=:code",
+  // dayplanner
+  getImpNote: "/dayPlan/:dayPlanId/importantNote",
+  updateImpNote: "dayPlan/:dayPlanId/importantNote",
 };
 
 export const ROUTES = {
