@@ -6,7 +6,14 @@ const moment = require("moment");
 // @GET : Only For testing
 // Get Important note for the day
 const getImportantNote = asyncHandler(async (req, res) => {
-  const { dayPlanId } = req.params;
+  const { dateISO } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+
+  const dayPlanId = req.user.dayPlans[dateISO];
   const { importantNote } = await DayPlanner.findById(dayPlanId).select(
     "importantNote"
   );
@@ -68,7 +75,14 @@ const getDayPlanner = asyncHandler(async (req, res) => {
 // @UPDATE
 // Update Important note for the day
 const updateImportantNote = asyncHandler(async (req, res) => {
-  const { dayPlanId } = req.params;
+  const { dateISO } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+
+  const dayPlanId = req.user.dayPlans[dateISO];
   const { importantNote } = req.body.data;
 
   const dayPlan = await DayPlanner.findByIdAndUpdate(
@@ -90,9 +104,16 @@ const updateImportantNote = asyncHandler(async (req, res) => {
 });
 
 // @UPDATE
-// Update Important note for the day
+// Update Sides for the day
 const updateSides = asyncHandler(async (req, res) => {
-  const { dayPlanId } = req.params;
+  const { dateISO } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+
+  const dayPlanId = req.user.dayPlans[dateISO];
   const { sides } = req.body.data;
 
   const dayPlan = await DayPlanner.findByIdAndUpdate(
@@ -113,9 +134,16 @@ const updateSides = asyncHandler(async (req, res) => {
 });
 
 // @UPDATE
-// Update Important note for the day
+// Update Priorities for the day
 const updatePriorities = asyncHandler(async (req, res) => {
-  const { dayPlanId } = req.params;
+  const { dateISO } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+  const dayPlanId = req.user.dayPlans[dateISO];
+
   const { priorities } = req.body.data;
 
   const dayPlan = await DayPlanner.findByIdAndUpdate(
