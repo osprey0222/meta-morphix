@@ -1,9 +1,19 @@
 import { useMutation, useQuery } from "react-query";
 
-import { getDayPlanner, updateImpNote } from "../services/dayPlanner.services";
+import {
+  getDayPlanner,
+  updateImpNote,
+  updatePriorities,
+  updateSides,
+} from "../services/dayPlanner.services";
 import { QUERY_KEYS } from "../constants/queryKeys";
 import moment from "moment";
-import { PatchImpNotePayload } from "../types/dayPlanner.types";
+import {
+  DateISO,
+  PatchImpNotePayload,
+  PatchPrioritiesPayload,
+  PatchSidesPayload,
+} from "../types/dayPlanner.types";
 
 export const useGetDayPlanner = (dateISO: string) => {
   return useQuery(
@@ -35,20 +45,60 @@ export const useGetDayPlanner = (dateISO: string) => {
 export const useUpdateImpNote = () => {
   return useMutation(
     ({
-      dayPlanId,
+      dateISO,
       payload,
       callback,
     }: {
-      dayPlanId: string;
+      dateISO: DateISO;
       payload: PatchImpNotePayload;
       callback?: (p: string) => void;
     }) => {
-      return updateImpNote(dayPlanId, payload);
+      return updateImpNote(dateISO, payload);
     },
     {
       onSuccess: (data, variables) => {
         variables.callback(variables.payload.data.importantNote);
       },
+      onError: (data, variables) => {},
+    }
+  );
+};
+
+export const useUpdateSides = () => {
+  return useMutation(
+    ({
+      dateISO,
+      payload,
+      callback,
+    }: {
+      dateISO: DateISO;
+      payload: PatchSidesPayload;
+      callback?: (p: string) => void;
+    }) => {
+      return updateSides(dateISO, payload);
+    },
+    {
+      onSuccess: (data, variables) => {},
+      onError: (data, variables) => {},
+    }
+  );
+};
+
+export const useUpdatePriorities = () => {
+  return useMutation(
+    ({
+      dateISO,
+      payload,
+      callback,
+    }: {
+      dateISO: DateISO;
+      payload: PatchPrioritiesPayload;
+      callback?: (p: string) => void;
+    }) => {
+      return updatePriorities(dateISO, payload);
+    },
+    {
+      onSuccess: (data, variables) => {},
       onError: (data, variables) => {},
     }
   );

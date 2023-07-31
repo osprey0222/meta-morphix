@@ -5,8 +5,10 @@ export const API_ROUTES = {
   verifyUser: "/users/user/verify?email=:email&code=:code",
   // dayplanner
   getDayPlanner: "/dayPlan/:dateISO",
-  getImpNote: "/dayPlan/:dayPlanId/importantNote",
-  updateImpNote: "dayPlan/:dayPlanId/importantNote",
+  getImpNote: "/dayPlan/:dateISO/importantNote",
+  updateImpNote: "dayPlan/:dateISO/importantNote",
+  updateSides: "dayPlan/:dateISO/sides",
+  updatePriorities: "dayPlan/:dateISO/priorities",
 };
 
 export const ROUTES = {

@@ -3,10 +3,15 @@ import { TextFieldBorderless } from "../../fields/TextField";
 import { useEffect, useState } from "react";
 import { useUpdateImpNote } from "../../../hooks/dayPlanner.hooks";
 import { useDebounce } from "../../../services/apis/debounce";
+import { useRouter } from "next/router";
+import { DateISO } from "../../../types/dayPlanner.types";
 
 const ImportantNote = (props: ImportantNoteProps) => {
   const { note: initData } = props;
   const [note, setNote] = useState<string>(initData);
+
+  const router = useRouter();
+  const dateISO = router.query.dateISO as DateISO;
 
   useEffect(() => {
     setNote(initData);
@@ -16,7 +21,7 @@ const ImportantNote = (props: ImportantNoteProps) => {
   const debounced = useDebounce(() =>
     updateImpNote({
       payload: { data: { importantNote: note } },
-      dayPlanId: "64c6b90092b3cfaada5287e3",
+      dateISO,
     })
   );
 

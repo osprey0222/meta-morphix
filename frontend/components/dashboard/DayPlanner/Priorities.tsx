@@ -1,15 +1,27 @@
 import { Box, Chip, Typography } from "@mui/material";
 import { TextFieldBorderless } from "../../fields/TextField";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { DateISO } from "../../../types/dayPlanner.types";
+import { useDebounce } from "../../../services/apis/debounce";
+import { useUpdatePriorities } from "../../../hooks/dayPlanner.hooks";
 
 const Priorities = (props: PrioritiesProps) => {
   const { data: initData } = props;
+
+  const router = useRouter();
+  const dateISO = router.query.dateISO as DateISO;
 
   const [data, setData] = useState<string[]>();
 
   useEffect(() => {
     setData(initData);
   }, [initData]);
+
+  const { mutate: updatePriorities } = useUpdatePriorities();
+  const debounce = useDebounce(() => {
+    updatePriorities({ dateISO, payload: { data: { priorities: data } } });
+  });
 
   return (
     <Box display="flex" flexDirection="column" mx={3}>
@@ -33,6 +45,7 @@ const Priorities = (props: PrioritiesProps) => {
               let newData = [...data];
               newData[index] = p;
               setData(newData);
+              debounce();
             }}
             placeholder={`P${index + 1}`}
           />

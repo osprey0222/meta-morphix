@@ -1,7 +1,11 @@
+export type DateISO = `${number}-${number}-${number}`;
+
+export type DateTimeISO = `${number}-${number}-${number}${number}:${number}`;
+
 export interface TimeTable {
   complete: boolean;
-  from: Date | string;
-  to: Date | string;
+  from: Date | DateTimeISO | string;
+  to: Date | DateTimeISO | string;
   info: string;
   tag?: { label: string; color: string };
   _id: string;
@@ -26,5 +30,21 @@ export interface PatchImpNotePayload {
 }
 
 export interface PatchImpNoteResponse {
+  data: string;
+}
+
+export interface PatchSidesPayload {
+  data: { sides: string[] };
+}
+
+export interface PatchSidesResponse {
+  data: string;
+}
+
+export interface PatchPrioritiesPayload {
+  data: { priorities: string[] };
+}
+
+export interface PatchPrioritiesResponse {
   data: string;
 }
