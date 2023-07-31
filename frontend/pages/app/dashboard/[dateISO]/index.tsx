@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DayPlanner from "../../../../components/dashboard/DayPlanner";
 import TopBarComponent from "../../../../components/dashboard/TopBarComponent";
@@ -7,45 +7,69 @@ import QuoteComponent from "../../../../components/dashboard/QuoteComponent";
 import { QuickNoteComponent } from "../../../../components/dashboard/QuickNoteComponent";
 import Streak from "../../../../components/dashboard/Streak";
 import FilesComponent from "../../../../components/dashboard/FilesComponent";
+import { isDateValid } from "../../../../utils/validations";
+import { useRouter } from "next/router";
+import moment from "moment";
+import { ROUTES } from "../../../../constants/routes";
+import { generateUrl } from "../../../../utils/common";
+import { toast } from "react-toastify";
 
 const dashboard = () => {
+  const router = useRouter();
+  const { dateISO } = router.query;
+
+  useEffect(() => {
+    if (dateISO && !isDateValid(dateISO)) {
+      toast.error(
+        `Invalid Date. Redirected to ${moment().format("DD MMMM, YYYY")}`
+      );
+      router.push(
+        generateUrl(ROUTES.dashboard, {
+          dateISO: moment().format("YYYY-MM-DD"),
+        })
+      );
+    }
+  }, [dateISO]);
+
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <TopBarComponent />
+    isDateValid(dateISO) && (
       <Box
-        width="98%"
         display="flex"
-        alignItems="start"
-        justifyContent="space-between"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
       >
-        <DayPlanner />
+        <TopBarComponent />
         <Box
+          width="98%"
           display="flex"
-          flexDirection="column"
-          alignItems="center"
+          alignItems="start"
           justifyContent="space-between"
-          gap={5}
         >
+          <DayPlanner />
           <Box
             display="flex"
-            alignItems="start"
-            justifyContent="space-around"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="space-between"
             gap={5}
           >
-            <QuickNoteComponent />
-            <QuoteComponent />
+            <Box
+              display="flex"
+              alignItems="start"
+              justifyContent="space-around"
+              gap={5}
+            >
+              <QuickNoteComponent />
+              <QuoteComponent />
+            </Box>
+            <FilesComponent />
           </Box>
-          <FilesComponent />
+          <Streak />
         </Box>
-        <Streak />
+        <BottomBarComponent />
       </Box>
-      <BottomBarComponent />
-    </Box>
+    )
   );
 };
 

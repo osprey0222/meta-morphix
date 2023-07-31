@@ -9,10 +9,19 @@ import RightIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import LogoutIcon from "@mui/icons-material/LogoutRounded";
 import { useRouter } from "next/router";
 import { ROUTES } from "../../constants/routes";
+import { generateUrl } from "../../utils/common";
 
 const TopBarComponent = () => {
   const router = useRouter();
   const { dateISO } = router.query;
+  const [dateChange, setDateChange] = useState(dateISO);
+
+  useEffect(() => {
+    router.push(
+      generateUrl(ROUTES.dashboard, { dateISO: dateChange as string })
+    );
+  }, [dateChange]);
+
   return (
     <Grid
       width="98%"
@@ -35,13 +44,32 @@ const TopBarComponent = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <LeftIcon sx={{ fontSize: 50, cursor: "pointer" }} />
           <DoubleLeftIcon sx={{ fontSize: 50, cursor: "pointer" }} />
-          <Typography mx={4} variant="h2">
-            {moment(dateISO).format("Do MMMM, dddd")}
-          </Typography>
+          <LeftIcon
+            sx={{ fontSize: 50, cursor: "pointer" }}
+            onClick={() =>
+              setDateChange(
+                moment(dateISO).add(-1, "days").format("YYYY-MM-DD")
+              )
+            }
+          />
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            width={900}
+          >
+            <Typography mx={4} variant="h2">
+              {moment(dateISO).format("Do MMMM, dddd")}
+            </Typography>
+          </Box>
+          <RightIcon
+            sx={{ fontSize: 50, cursor: "pointer" }}
+            onClick={() =>
+              setDateChange(moment(dateISO).add(1, "days").format("YYYY-MM-DD"))
+            }
+          />
           <DoubleRightIcon sx={{ fontSize: 50, cursor: "pointer" }} />
-          <RightIcon sx={{ fontSize: 50, cursor: "pointer" }} />
         </Box>
       </Grid>
       <Grid display="flex" alignItems="center" justifyContent="center" xs={1}>

@@ -103,3 +103,23 @@ export const useUpdatePriorities = () => {
     }
   );
 };
+
+export const useUpdateTT = () => {
+  return useMutation(
+    ({
+      dateISO,
+      payload,
+      callback,
+    }: {
+      dateISO: DateISO;
+      payload: PatchPrioritiesPayload;
+      callback?: (p: string) => void;
+    }) => {
+      return updatePriorities(dateISO, payload);
+    },
+    {
+      onSuccess: (data, variables) => {},
+      onError: (data, variables) => {},
+    }
+  );
+};

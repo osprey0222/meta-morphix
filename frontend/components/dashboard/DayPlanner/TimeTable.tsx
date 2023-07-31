@@ -19,6 +19,8 @@ import DeleteIcon from "@mui/icons-material/CancelRounded";
 import AddIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { TimeTable } from "../../../types/dayPlanner.types";
 import moment from "moment";
+import { useDebounce } from "../../../services/apis/debounce";
+import { useUpdateTT } from "../../../hooks/dayPlanner.hooks";
 
 const Time = (props: {
   time: Dayjs | string;
@@ -102,12 +104,18 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
+  const { mutate: updateTT } = useUpdateTT();
+  const debounce = useDebounce(() =>
+    updateTT({ payload: { data: { priorities: [] } }, dateISO: "12-32-43" })
+  );
+
   const onTTChange = (index: number, field: { [key: string]: any }) => {
     timeTableData[index] = {
       ...timeTableData[index],
       ...field,
     };
     setData([...timeTableData]);
+    debounce();
   };
 
   return (
@@ -191,7 +199,12 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
             </Box>
           </Box>
         ))}
-        <AddIcon sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }} />
+        <AddIcon
+          sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }}
+          onClick={() => {
+            /** Hit post API  */
+          }}
+        />
         <div ref={divRef} />
       </Box>
     </>
