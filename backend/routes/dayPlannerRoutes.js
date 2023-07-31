@@ -22,8 +22,8 @@ router.patch("/:dateISO/sides", authorized, updateSides);
 router.patch("/:dateISO/priorities", authorized, updatePriorities);
 
 // TT
-router.post("/:dayPlanId/TT", authorized, postTT);
-router.patch("/:dayPlanId/TT/:TT_index", authorized, updateTT);
-router.delete("/:dayPlanId/TT/:TT_index", authorized, deleteTT);
+router.post("/:dateISO/TT", authorized, postTT);
+router.patch("/:dateISO/TT/:TT_index", authorized, updateTT);
+router.delete("/:dateISO/TT/:TT_index", authorized, deleteTT);
 
 module.exports = router;

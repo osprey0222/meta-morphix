@@ -6,7 +6,15 @@ const moment = require("moment");
 // @UPDATE
 // Update TT entry info
 const updateTT = asyncHandler(async (req, res) => {
-  const { dayPlanId, TT_index } = req.params;
+  const { dateISO, TT_index } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+
+  const dayPlanId = req.user.dayPlans[dateISO];
+
   const { update } = req.body.data;
   const dayPlan = await DayPlanner.findById(dayPlanId);
 
@@ -30,7 +38,14 @@ const updateTT = asyncHandler(async (req, res) => {
 // @CREATE : Create new Timetable entry
 // Create
 const postTT = asyncHandler(async (req, res) => {
-  const { dayPlanId } = req.params;
+  const { dateISO } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+
+  const dayPlanId = req.user.dayPlans[dateISO];
   const dayPlan = await DayPlanner.findById(dayPlanId);
 
   if (dayPlan) {
@@ -63,7 +78,14 @@ const postTT = asyncHandler(async (req, res) => {
 // @DELETE
 // Delete Timetable
 const deleteTT = asyncHandler(async (req, res) => {
-  const { dayPlanId, TT_index } = req.params;
+  const { dateISO, TT_index } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+
+  const dayPlanId = req.user.dayPlans[dateISO];
   const dayPlan = await DayPlanner.findById(dayPlanId);
 
   if (dayPlan) {
