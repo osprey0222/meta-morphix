@@ -1,12 +1,27 @@
-// Function to hit API after a while
-const debounce = (mainFunc: (args: string[]) => void, delay: number) => {
-  let timer;
+import { useEffect, useMemo, useRef } from "react";
 
-  return function (...args) {
-    clearTimeout(timer);
-
-    timer = setTimeout(() => {
-      mainFunc(...args);
-    }, delay);
+const debounce = (fn, delay = 1000) => {
+  let timerId = null;
+  return (...args) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => fn(...args), delay);
   };
+};
+
+export const useDebounce = (callback: any) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current = callback;
+  }, [callback]);
+
+  const debouncedCallback = useMemo(() => {
+    const func = () => {
+      ref.current?.();
+    };
+
+    return debounce(func, 1000);
+  }, []);
+
+  return debouncedCallback;
 };

@@ -28,3 +28,11 @@ export function POST<Payload, Response>(
 ): Promise<Response> {
   return axiosInstance.post(url, data, { headers }).then((res) => res.data);
 }
+
+export function PATCH<Payload, Response>(
+  url: string,
+  data: Payload,
+  headers?: AxiosHeaders
+): Promise<Response> {
+  return axiosInstance.patch(url, data, { headers }).then((res) => res.data);
+}

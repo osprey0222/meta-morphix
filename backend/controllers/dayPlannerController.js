@@ -35,7 +35,7 @@ const getDayPlanner = asyncHandler(async (req, res) => {
   let dayPlan;
   const dayPlanId = req.user.dayPlans[dateISO];
 
-  if (!dayPlanId) {
+  if (!Boolean(dayPlanId)) {
     // to date data found: create new
     // default: to: 08:00; from: 09:00
     dayPlan = await DayPlanner.create({
@@ -56,7 +56,8 @@ const getDayPlanner = asyncHandler(async (req, res) => {
       ],
     });
     // Adding to current user
-    req.user.dayPlans.push({ [dateISO]: dayPlan.id });
+
+    req.user.dayPlans = { ...req.user.dayPlans, [dateISO]: dayPlan.id };
     req.user.save();
   } else {
     dayPlan = await DayPlanner.findById({ _id: dayPlanId });
@@ -79,6 +80,7 @@ const updateImportantNote = asyncHandler(async (req, res) => {
   if (dayPlan) {
     res.status(201).json({
       status: 201,
+      data: importantNote,
       message: "Important Note Updated Successfully",
     });
   } else {

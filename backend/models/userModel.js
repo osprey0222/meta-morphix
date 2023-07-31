@@ -38,7 +38,7 @@ const UserSchema = new Schema(
       default: false,
     },
     dayPlans: {
-      type: [Object],
+      type: Object,
       default: [],
     },
     tags: {

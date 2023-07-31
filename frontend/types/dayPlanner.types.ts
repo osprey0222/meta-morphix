@@ -1,7 +1,7 @@
 export interface TimeTable {
   complete: boolean;
-  from: Date;
-  to: Date;
+  from: Date | string;
+  to: Date | string;
   info: string;
   tag?: { label: string; color: string };
   _id: string;
@@ -19,4 +19,12 @@ export interface DayPlanner {
 
 export interface GetDayPlannerResponse {
   data: DayPlanner;
+}
+
+export interface PatchImpNotePayload {
+  data: { importantNote: string };
+}
+
+export interface PatchImpNoteResponse {
+  data: string;
 }
