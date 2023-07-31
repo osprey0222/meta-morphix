@@ -18,9 +18,13 @@ import AddTagPopover from "./AddTagPopover";
 import DeleteIcon from "@mui/icons-material/CancelRounded";
 import AddIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { TimeTable } from "../../../types/dayPlanner.types";
+import moment from "moment";
 
-const Time = () => {
-  const [time, setTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
+const Time = (props: {
+  time: Dayjs | string;
+  onChange: (p: Dayjs | string | null) => void;
+}) => {
+  const { time, onChange } = props;
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimeField
@@ -38,8 +42,8 @@ const Time = () => {
           fontSize: "10px",
           p: 0,
         }}
-        value={time}
-        onChange={(p) => setTime(p)}
+        value={dayjs(time)}
+        onChange={(p) => onChange(p)}
       />
     </LocalizationProvider>
   );
@@ -92,11 +96,19 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
 
   useEffect(() => {
     setData(timeTableData || []);
-  }, []);
+  }, [timeTableData]);
 
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
+
+  const onTTChange = (index: number, field: { [key: string]: any }) => {
+    timeTableData[index] = {
+      ...timeTableData[index],
+      ...field,
+    };
+    setData([...timeTableData]);
+  };
 
   return (
     <>
@@ -154,23 +166,26 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                 />
               )}
               <DoneIcon
-                onClick={() => {
-                  timeTableData[index] = {
-                    ...timeTableData[index],
-                    complete: !complete,
-                  };
-                  setData([...timeTableData]);
-                }}
+                onClick={() => onTTChange(index, { complete: !complete })}
                 sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
               />
-              <Time /> {"-"} <Time />
+              <Time
+                time={to as string}
+                onChange={(to: string) =>
+                  onTTChange(index, { to: new Date(to).toISOString() })
+                }
+              />
+              {"-"}
+              <Time
+                time={from as string}
+                onChange={(from: string) =>
+                  onTTChange(index, { from: new Date(from).toISOString() })
+                }
+              />
               <RightArrowIcon sx={{ color: "grey.700" }} />
               <TextFieldBorderless
                 value={info}
-                onChange={(p: string) => {
-                  timeTableData[index] = { ...timeTableData[index], info: p };
-                  setData([...timeTableData]);
-                }}
+                onChange={(info: string) => onTTChange(index, { info })}
               />
               {tag && <Tag TT_index={index} tag={tag} />}
             </Box>
