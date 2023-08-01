@@ -2,12 +2,13 @@ import { Box, Chip, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useGetQN, useUpdateQN } from "../../hooks/quickNote.hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HistoryIcon from "@mui/icons-material/History";
 import NotesIcon from "@mui/icons-material/NotesRounded";
 import { TooltipComp } from "../common/ToolTipWrapper";
 import { useDebounce } from "../../services/apis/debounce";
 import { DateISO } from "../../types/dayPlanner.types";
+import { getStringifiedHistory } from "../../utils/qn";
 
 export const QuickNoteComponent = () => {
   const [showHistory, setShowHistory] = useState(false);
@@ -16,8 +17,12 @@ export const QuickNoteComponent = () => {
   const router = useRouter();
   const { dateISO } = router.query;
 
-  const { data: history } = useGetQN();
+  const { data: history, refetch: refetchHistory } = useGetQN();
   const { mutate: updateNote } = useUpdateQN();
+
+  useEffect(() => {
+    setNote(history[dateISO as string]);
+  }, [dateISO, history]);
 
   const debounce = useDebounce(() =>
     updateNote({
@@ -63,9 +68,9 @@ export const QuickNoteComponent = () => {
           resize: "none",
         }}
         readOnly={showHistory}
-        value={showHistory ? history : note}
+        value={showHistory ? getStringifiedHistory(history) : note}
         onChange={(e) => onChange(e.target.value)}
-        defaultValue={moment().format("MM/DD") + "\n\n"}
+        placeholder="In this boundless page, pour your thoughts' symphony."
       />
 
       {showHistory ? (
@@ -79,7 +84,10 @@ export const QuickNoteComponent = () => {
         <TooltipComp label="Show History">
           <HistoryIcon
             sx={{ cursor: "pointer", position: "absolute", top: 16, right: 15 }}
-            onClick={() => setShowHistory(!showHistory)}
+            onClick={() => {
+              refetchHistory();
+              setShowHistory(!showHistory);
+            }}
           />
         </TooltipComp>
       )}
