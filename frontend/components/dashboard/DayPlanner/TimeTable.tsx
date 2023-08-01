@@ -1,7 +1,7 @@
 import RightArrowIcon from "@mui/icons-material/ArrowRightAltRounded";
 import DoneIcon from "@mui/icons-material/DoneRounded";
 import { TextFieldBorderless } from "../../fields/TextField";
-import { Box, Chip, Divider } from "@mui/material";
+import { Box, Chip, Divider, Typography } from "@mui/material";
 import { TimeField } from "@mui/x-date-pickers/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -13,6 +13,7 @@ import AddIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { TimeTable } from "../../../types/dayPlanner.types";
 import { useDebounce } from "../../../services/apis/debounce";
 import { useUpdateTT } from "../../../hooks/dayPlanner.hooks";
+import moment from "moment";
 
 const Time = (props: {
   time: Dayjs | string;
@@ -94,7 +95,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
 
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [data]);
 
   const { mutate: updateTT } = useUpdateTT();
   const debounce = useDebounce(() =>
@@ -176,16 +177,16 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                 sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
               />
               <Time
-                time={to as string}
-                onChange={(to: string) =>
-                  onTTChange(index, { to: new Date(to).toISOString() })
+                time={from as string}
+                onChange={(from: string) =>
+                  onTTChange(index, { from: new Date(from).toISOString() })
                 }
               />
               {"-"}
               <Time
-                time={from as string}
-                onChange={(from: string) =>
-                  onTTChange(index, { from: new Date(from).toISOString() })
+                time={to as string}
+                onChange={(to: string) =>
+                  onTTChange(index, { to: new Date(to).toISOString() })
                 }
               />
               <RightArrowIcon sx={{ color: "grey.700" }} />
@@ -197,21 +198,31 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
             </Box>
           </Box>
         ))}
-        <AddIcon
-          sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }}
-          onClick={() => {
-            /** Hit post API  */
-            const updateData = [...data];
-            updateData.push({
-              _id: null,
-              complete: false,
-              from: "",
-              to: "",
-              info: "",
-            });
-            setData(updateData);
-          }}
-        />
+        {data.length < 20 ? (
+          <AddIcon
+            sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }}
+            onClick={() => {
+              /** Hit post API  */
+              const updateData = [...data];
+              updateData.push({
+                _id: null,
+                complete: false,
+                from: moment(
+                  updateData[updateData.length - 1].to
+                ).toISOString(),
+                to: moment(updateData[updateData.length - 1].to)
+                  .add(1, "hours")
+                  .toISOString(),
+                info: "",
+              });
+              setData(updateData);
+            }}
+          />
+        ) : (
+          <Typography my={1} variant="caption" color="grey.600">
+            Max entries reached.
+          </Typography>
+        )}
         <div ref={divRef} />
       </Box>
     </>
