@@ -215,15 +215,19 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
               />
               <Time
                 time={from as string}
-                onChange={(from: string) =>
-                  onTTEntryChange(index, { from: new Date(from).toISOString() })
+                onChange={(from: Dayjs) =>
+                  onTTEntryChange(index, {
+                    from: from.isValid() ? from.toISOString() : "00",
+                  })
                 }
               />
               {"-"}
               <Time
                 time={to as string}
-                onChange={(to: string) =>
-                  onTTEntryChange(index, { to: new Date(to).toISOString() })
+                onChange={(to: Dayjs) =>
+                  onTTEntryChange(index, {
+                    to: to.isValid() ? to.toISOString() : "00",
+                  })
                 }
               />
               <RightArrowIcon sx={{ color: "grey.700" }} />
