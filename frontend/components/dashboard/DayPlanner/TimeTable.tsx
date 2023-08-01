@@ -18,7 +18,6 @@ import AddTagPopover from "./AddTagPopover";
 import DeleteIcon from "@mui/icons-material/CancelRounded";
 import AddIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { TimeTable } from "../../../types/dayPlanner.types";
-import moment from "moment";
 import { useDebounce } from "../../../services/apis/debounce";
 import { useUpdateTT } from "../../../hooks/dayPlanner.hooks";
 
