@@ -1,4 +1,11 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import LeftIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
@@ -14,6 +21,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { getFormattedDate } from "../../utils/features";
+import { TooltipComp } from "../common/ToolTipWrapper";
 
 const DateLabel = (props: {
   dateISO: string;
@@ -159,14 +167,15 @@ const TopBarComponent = () => {
           </Box>
         </Grid>
         <Grid display="flex" alignItems="center" justifyContent="center" xs={1}>
-          <div
-            onClick={() => {
-              localStorage.setItem("access_token", "");
-              router.push(ROUTES.login);
-            }}
-          >
-            <LogoutIcon sx={{ cursor: "pointer" }} />
-          </div>
+          <TooltipComp label={"Exit"}>
+            <LogoutIcon
+              onClick={() => {
+                localStorage.setItem("access_token", "");
+                router.push(ROUTES.login);
+              }}
+              sx={{ cursor: "pointer" }}
+            />
+          </TooltipComp>
         </Grid>
       </Grid>
     </>

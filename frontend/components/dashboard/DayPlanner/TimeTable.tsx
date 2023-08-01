@@ -1,14 +1,7 @@
 import RightArrowIcon from "@mui/icons-material/ArrowRightAltRounded";
 import DoneIcon from "@mui/icons-material/DoneRounded";
 import { TextFieldBorderless } from "../../fields/TextField";
-import {
-  Box,
-  Chip,
-  Divider,
-  Popover,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Chip, Divider } from "@mui/material";
 import { TimeField } from "@mui/x-date-pickers/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -170,6 +163,12 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                     right: -18,
                     cursor: "pointer",
                   }}
+                  onClick={() => {
+                    // Hit delete API
+                    const updateData = [...data];
+                    updateData.splice(pointerEntered, 1);
+                    setData(updateData);
+                  }}
                 />
               )}
               <DoneIcon
@@ -202,6 +201,15 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
           sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }}
           onClick={() => {
             /** Hit post API  */
+            const updateData = [...data];
+            updateData.push({
+              _id: null,
+              complete: false,
+              from: "",
+              to: "",
+              info: "",
+            });
+            setData(updateData);
           }}
         />
         <div ref={divRef} />
