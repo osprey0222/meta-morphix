@@ -23,6 +23,7 @@ router.patch("/:dateISO/priorities", authorized, updatePriorities);
 
 // TT
 router.post("/:dateISO/TT", authorized, postTT);
+router.patch("/:dateISO", authorized, updateTT);
 router.patch("/:dateISO/TT/:TT_index", authorized, updateTT);
 router.delete("/:dateISO/TT/:TT_index", authorized, deleteTT);
 

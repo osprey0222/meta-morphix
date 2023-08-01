@@ -13,7 +13,7 @@ const DayPlanner = () => {
   const { dateISO } = router.query;
   const { data } = useGetDayPlanner(dateISO as string);
 
-  const { timeTable, importantNote, priorities, sides } = data;
+  const { timeTable = [], importantNote, priorities, sides } = data;
 
   return (
     <Box height={650}>

@@ -48,3 +48,11 @@ export interface PatchPrioritiesPayload {
 export interface PatchPrioritiesResponse {
   data: string;
 }
+
+export interface PatchTTPayload {
+  data: { update: TimeTable[] };
+}
+
+export interface PatchTTResponse {
+  data: TimeTable[];
+}

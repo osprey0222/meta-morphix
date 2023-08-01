@@ -90,9 +90,6 @@ const TopBarComponent = () => {
   const [dateChange, setDateChange] = useState(dateISO);
 
   const [openDt, setOpenDt] = useState(false);
-  const [inputRef, setInputRef] = useState(null);
-
-  console.log(openDt);
 
   useEffect(() => {
     router.push(

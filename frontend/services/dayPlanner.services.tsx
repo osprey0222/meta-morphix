@@ -10,6 +10,8 @@ import {
   PatchPrioritiesResponse,
   PatchSidesPayload,
   PatchSidesResponse,
+  PatchTTPayload,
+  PatchTTResponse,
 } from "../types/dayPlanner.types";
 
 export const getDayPlanner = (dateISO: string) => {
@@ -43,6 +45,13 @@ export const updatePriorities = (
     url,
     payload
   ).then((res) => res.data);
+};
+
+export const updateTimeTable = (dateISO: DateISO, payload: PatchTTPayload) => {
+  const url = generateUrl(API_ROUTES.updateTT, { dateISO });
+  return PATCH<PatchTTPayload, PatchTTResponse>(url, payload).then(
+    (res) => res.data
+  );
 };
 
 export const getImpNote = (dayPlanId: string) => {

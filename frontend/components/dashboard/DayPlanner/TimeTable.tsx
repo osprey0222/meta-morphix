@@ -10,10 +10,12 @@ import { useEffect, useRef, useState } from "react";
 import AddTagPopover from "./AddTagPopover";
 import DeleteIcon from "@mui/icons-material/CancelRounded";
 import AddIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import { TimeTable } from "../../../types/dayPlanner.types";
+import { DateISO, TimeTable } from "../../../types/dayPlanner.types";
 import { useDebounce } from "../../../services/apis/debounce";
 import { useUpdateTT } from "../../../hooks/dayPlanner.hooks";
 import moment from "moment";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const Time = (props: {
   time: Dayjs | string;
@@ -88,6 +90,8 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
   const [pointerEntered, setPointerEntered] = useState<number>(-1);
 
   const divRef = useRef(null);
+  const router = useRouter();
+  const { dateISO } = router.query;
 
   useEffect(() => {
     setData(timeTableData || []);
@@ -98,16 +102,54 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
   }, [data]);
 
   const { mutate: updateTT } = useUpdateTT();
-  const debounce = useDebounce(() =>
-    updateTT({ payload: { data: { priorities: [] } }, dateISO: "12-32-43" })
+  const debounce = useDebounce(
+    () =>
+      updateTT({
+        payload: { data: { update: data } },
+        dateISO: dateISO as DateISO,
+      }),
+    3000
   );
 
-  const onTTChange = (index: number, field: { [key: string]: any }) => {
-    timeTableData[index] = {
-      ...timeTableData[index],
+  const onTTEntryChange = (index: number, field: { [key: string]: any }) => {
+    const updateData = [...data];
+    updateData[index] = {
+      ...updateData[index],
       ...field,
     };
-    setData([...timeTableData]);
+    setData([...updateData]);
+    debounce();
+  };
+
+  const onTTEntryCreate = () => {
+    const updateData = [...data];
+    updateData.push({
+      _id: null,
+      complete: false,
+      from:
+        data.length > 0
+          ? moment(updateData[updateData.length - 1].to).toISOString()
+          : moment(dateISO + " " + "06:00").toISOString(),
+      to:
+        data.length > 0
+          ? moment(updateData[updateData.length - 1].to)
+              .add(1, "hours")
+              .toISOString()
+          : moment(dateISO + " " + "07:00").toISOString(),
+      info: "",
+    });
+    setData(updateData);
+    debounce();
+  };
+
+  const onTTEntryDelete = (index: number) => {
+    if (data.length === 1) {
+      toast.warning("Atleast 1 TT entry is required.");
+      return;
+    }
+    const updateData = [...data];
+    updateData.splice(index, 1);
+    setData(updateData);
     debounce();
   };
 
@@ -164,35 +206,30 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                     right: -18,
                     cursor: "pointer",
                   }}
-                  onClick={() => {
-                    // Hit delete API
-                    const updateData = [...data];
-                    updateData.splice(pointerEntered, 1);
-                    setData(updateData);
-                  }}
+                  onClick={() => onTTEntryDelete(pointerEntered)}
                 />
               )}
               <DoneIcon
-                onClick={() => onTTChange(index, { complete: !complete })}
+                onClick={() => onTTEntryChange(index, { complete: !complete })}
                 sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
               />
               <Time
                 time={from as string}
                 onChange={(from: string) =>
-                  onTTChange(index, { from: new Date(from).toISOString() })
+                  onTTEntryChange(index, { from: new Date(from).toISOString() })
                 }
               />
               {"-"}
               <Time
                 time={to as string}
                 onChange={(to: string) =>
-                  onTTChange(index, { to: new Date(to).toISOString() })
+                  onTTEntryChange(index, { to: new Date(to).toISOString() })
                 }
               />
               <RightArrowIcon sx={{ color: "grey.700" }} />
               <TextFieldBorderless
                 value={info}
-                onChange={(info: string) => onTTChange(index, { info })}
+                onChange={(info: string) => onTTEntryChange(index, { info })}
               />
               {tag && <Tag TT_index={index} tag={tag} />}
             </Box>
@@ -201,22 +238,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
         {data.length < 20 ? (
           <AddIcon
             sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }}
-            onClick={() => {
-              /** Hit post API  */
-              const updateData = [...data];
-              updateData.push({
-                _id: null,
-                complete: false,
-                from: moment(
-                  updateData[updateData.length - 1].to
-                ).toISOString(),
-                to: moment(updateData[updateData.length - 1].to)
-                  .add(1, "hours")
-                  .toISOString(),
-                info: "",
-              });
-              setData(updateData);
-            }}
+            onClick={onTTEntryCreate}
           />
         ) : (
           <Typography my={1} variant="caption" color="grey.600">

@@ -5,6 +5,7 @@ import {
   updateImpNote,
   updatePriorities,
   updateSides,
+  updateTimeTable,
 } from "../services/dayPlanner.services";
 import { QUERY_KEYS } from "../constants/queryKeys";
 import moment from "moment";
@@ -13,6 +14,7 @@ import {
   PatchImpNotePayload,
   PatchPrioritiesPayload,
   PatchSidesPayload,
+  PatchTTPayload,
 } from "../types/dayPlanner.types";
 
 export const useGetDayPlanner = (dateISO: string) => {
@@ -112,11 +114,9 @@ export const useUpdateTT = () => {
       callback,
     }: {
       dateISO: DateISO;
-      payload: PatchPrioritiesPayload;
+      payload: PatchTTPayload;
       callback?: (p: string) => void;
-    }) => {
-      return updatePriorities(dateISO, payload);
-    },
+    }) => updateTimeTable(dateISO, payload),
     {
       onSuccess: (data, variables) => {},
       onError: (data, variables) => {},

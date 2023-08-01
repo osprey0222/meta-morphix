@@ -9,6 +9,7 @@ export const API_ROUTES = {
   updateImpNote: "dayPlan/:dateISO/importantNote",
   updateSides: "dayPlan/:dateISO/sides",
   updatePriorities: "dayPlan/:dateISO/priorities",
+  updateTT: "dayPlan/:dateISO",
 };
 
 export const ROUTES = {

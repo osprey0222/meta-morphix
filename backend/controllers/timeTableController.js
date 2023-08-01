@@ -4,8 +4,38 @@ const { isDateValid } = require("../utils/utils");
 const moment = require("moment");
 
 // @UPDATE
-// Update TT entry info
+// Update TT as a whole
 const updateTT = asyncHandler(async (req, res) => {
+  const { dateISO } = req.params;
+
+  if (!Boolean(req.user.dayPlans[dateISO])) {
+    res.status(400).json({ status: 404, message: "Not Found." });
+    return;
+  }
+
+  const dayPlanId = req.user.dayPlans[dateISO];
+
+  const { update: updatedTT } = req.body.data;
+  const dayPlan = await DayPlanner.findById(dayPlanId);
+
+  if (dayPlan) {
+    dayPlan.timeTable = updatedTT;
+    dayPlan.save();
+
+    res.status(201).json({
+      status: 201,
+      data: dayPlan.timeTable,
+      message: "TT Updated Successfully",
+    });
+  } else {
+    res.status(400).json({ status: 400, message: "Invalid." });
+    throw new Error("Invalid.");
+  }
+});
+
+// @UPDATE
+// Update TT entry info
+const updateTTEntry = asyncHandler(async (req, res) => {
   const { dateISO, TT_index } = req.params;
 
   if (!Boolean(req.user.dayPlans[dateISO])) {

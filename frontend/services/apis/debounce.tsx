@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 
-const debounce = (fn, delay = 1000) => {
+const debounce = (fn, delay) => {
   let timerId = null;
   return (...args) => {
     clearTimeout(timerId);
@@ -8,7 +8,7 @@ const debounce = (fn, delay = 1000) => {
   };
 };
 
-export const useDebounce = (callback: any) => {
+export const useDebounce = (callback: any, delay: number = 1000) => {
   const ref = useRef();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export const useDebounce = (callback: any) => {
       ref.current?.();
     };
 
-    return debounce(func, 1000);
+    return debounce(func, delay);
   }, []);
 
   return debouncedCallback;
