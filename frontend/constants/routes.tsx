@@ -10,6 +10,9 @@ export const API_ROUTES = {
   updateSides: "dayPlan/:dateISO/sides",
   updatePriorities: "dayPlan/:dateISO/priorities",
   updateTT: "dayPlan/:dateISO",
+  // quicknote
+  getQN: "/quickNote",
+  updateQN: "/quickNote/:dateISO",
 };
 
 export const ROUTES = {
