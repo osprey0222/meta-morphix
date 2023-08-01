@@ -1,12 +1,12 @@
-import { Box, Chip, Divider, Typography } from "@mui/material";
+import { Box, Chip, Divider, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import TimeTable from "./TimeTable";
-import { timeTable } from "../../../utils/sampleData";
 import Sides from "./Sides";
 import Priorities from "./Priorities";
 import ImportantNote from "./ImportantNote";
 import { useRouter } from "next/router";
 import { useGetDayPlanner } from "../../../hooks/dayPlanner.hooks";
+import LinkIcon from "@mui/icons-material/Link";
 
 const DayPlanner = () => {
   const router = useRouter();
@@ -41,8 +41,22 @@ const DayPlanner = () => {
         <Divider variant="middle" sx={{ my: 1 }} />
         <ImportantNote note={importantNote} />
         <Divider flexItem variant="middle" sx={{ my: 1 }}>
-          <Typography fontSize="small" color="GrayText">
+          <Typography
+            display="flex"
+            alignItems="center"
+            fontSize="small"
+            color="GrayText"
+            gap={0.5}
+          >
             Time Table
+            <Tooltip title="Copy Sharable Link" enterDelay={1000}>
+              <LinkIcon
+                sx={{
+                  fontSize: 20,
+                  cursor: "pointer",
+                }}
+              />
+            </Tooltip>
           </Typography>
         </Divider>
         <TimeTable data={timeTable} />

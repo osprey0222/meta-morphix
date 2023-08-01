@@ -28,6 +28,7 @@ const QuoteComponent = () => {
         letterSpacing="0.5px"
         variant="body1"
         align="center"
+        sx={{ maxHeight: 293, overflow: "scroll" }}
       >
         {quote || "Honesty is the best policy!"}
       </Typography>

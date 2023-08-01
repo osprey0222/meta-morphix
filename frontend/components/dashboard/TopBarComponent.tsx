@@ -21,8 +21,15 @@ const DateLabel = (props: {
   setOpenDt: (p: boolean) => void;
   inputRef: any;
   InputProps: any;
+  setDateChange: (d: string) => void;
 }) => {
-  const { dateISO, openDt, setOpenDt, InputProps: { ref } = {} } = props;
+  const {
+    dateISO,
+    openDt,
+    setOpenDt,
+    InputProps: { ref } = {},
+    setDateChange,
+  } = props;
   return (
     <Box
       display="flex"
@@ -31,8 +38,9 @@ const DateLabel = (props: {
       width={900}
       sx={{ cursor: "pointer" }}
       onClick={() => setOpenDt(!openDt)}
+      onDoubleClick={() => setDateChange(getFormattedDate(new Date()))}
     >
-      <Typography mx={4} variant="h2" ref={ref}>
+      <Typography mx={4} variant="h2" ref={ref} sx={{ userSelect: "none" }}>
         {moment(dateISO).format("Do MMMM, dddd")}
       </Typography>
     </Box>
@@ -51,6 +59,7 @@ const DatePickerCustom = (props: any) => {
             dateISO,
             openDt,
             setOpenDt,
+            setDateChange,
           } as any,
         }}
         ref={inputRef}
