@@ -15,6 +15,8 @@ export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
     type = "string",
     underline = false,
     rows = 1,
+    onClick,
+    disabled = false,
   } = props;
   return (
     <TextField
@@ -29,6 +31,8 @@ export const TextFieldBorderless = (props: TextFieldBorderlessProps) => {
       placeholder={placeholder}
       multiline={rows > 1}
       rows={rows}
+      onFocus={onClick}
+      disabled={disabled}
     />
   );
 };
@@ -41,6 +45,8 @@ interface TextFieldBorderlessProps {
   placeholder?: string;
   underline?: boolean;
   rows?: number;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 const TextFieldComp = (props: TextFieldProps) => {

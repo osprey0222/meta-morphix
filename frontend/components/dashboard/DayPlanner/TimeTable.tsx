@@ -16,12 +16,14 @@ import { useUpdateTT } from "../../../hooks/dayPlanner.hooks";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { TT } from "../../../constants/general";
 
 const Time = (props: {
   time: Dayjs | string;
   onChange: (p: Dayjs | string | null) => void;
+  disabled?: boolean;
 }) => {
-  const { time, onChange } = props;
+  const { time, onChange, disabled = false } = props;
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimeField
@@ -41,6 +43,7 @@ const Time = (props: {
         }}
         value={dayjs(time)}
         onChange={(p) => onChange(p)}
+        disabled={disabled}
       />
     </LocalizationProvider>
   );
@@ -143,7 +146,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
   };
 
   const onTTEntryDelete = (index: number) => {
-    if (data.length === 1) {
+    if (data.length === TT.LOWER_LIMIT) {
       toast.warning("Atleast 1 TT entry is required.");
       return;
     }
@@ -211,7 +214,11 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
               )}
               <DoneIcon
                 onClick={() => onTTEntryChange(index, { complete: !complete })}
-                sx={{ fontSize: 15, cursor: "pointer", color: "green" }}
+                sx={{
+                  fontSize: 15,
+                  cursor: "pointer",
+                  color: complete ? "success.main" : "grey.300",
+                }}
               />
               <Time
                 time={from as string}
@@ -220,6 +227,7 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                     from: from.isValid() ? from.toISOString() : "00",
                   })
                 }
+                disabled={complete}
               />
               {"-"}
               <Time
@@ -229,17 +237,23 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                     to: to.isValid() ? to.toISOString() : "00",
                   })
                 }
+                disabled={complete}
               />
-              <RightArrowIcon sx={{ color: "grey.700" }} />
+              <RightArrowIcon sx={{ color: `grey.${complete ? 400 : 700}` }} />
               <TextFieldBorderless
                 value={info}
                 onChange={(info: string) => onTTEntryChange(index, { info })}
+                onClick={() => {
+                  if (index + 1 < TT.UPPER_LIMIT && index === data.length - 1)
+                    onTTEntryCreate();
+                }}
+                disabled={complete}
               />
               {tag && <Tag TT_index={index} tag={tag} />}
             </Box>
           </Box>
         ))}
-        {data.length < 20 ? (
+        {data.length < TT.UPPER_LIMIT ? (
           <AddIcon
             sx={{ my: 0.5, cursor: "pointer", color: "grey.600" }}
             onClick={onTTEntryCreate}
