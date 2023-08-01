@@ -7,6 +7,7 @@ require("dotenv").config();
 // routers
 const userRoutes = require("./routes/userRoutes");
 const dayPlanRoutes = require("./routes/dayPlannerRoutes");
+const qnRoutes = require("./routes/quickNoteRoutes");
 
 // express
 const app = express();
@@ -37,3 +38,4 @@ app.use(bodyparser.urlencoded({ extended: false }));
 
 app.use("/users", userRoutes);
 app.use("/dayPlan", dayPlanRoutes);
+app.use("/quickNote", qnRoutes);
