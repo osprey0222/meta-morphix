@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useGetQN, useUpdateQN } from "../../hooks/quickNote.hooks";
 import { useEffect, useState } from "react";
 import HistoryIcon from "@mui/icons-material/History";
-import NotesIcon from "@mui/icons-material/NotesRounded";
+import NotesIcon from "@mui/icons-material/EditNote";
 import { TooltipComp } from "../common/ToolTipWrapper";
 import { useDebounce } from "../../services/apis/debounce";
 import { DateISO } from "../../types/dayPlanner.types";

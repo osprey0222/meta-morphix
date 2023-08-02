@@ -1,20 +1,52 @@
 import { Box, Chip, Grid, Typography } from "@mui/material";
 import { useState } from "react";
+import { TextFieldBorderless } from "../fields/TextField";
+// import DownloadIcon from "@mui/icons-material/CloudDownloadRounded";
+import DownloadIcon from "@mui/icons-material/FileDownloadRounded";
+import UploadingIcon from "@mui/icons-material/DownloadingRounded";
 
 const File = (props: FileProps) => {
   const { name } = props;
   return (
-    <Box sx={{ bgcolor: "white", borderRadius: 1 }}>
-      <Typography
-        variant="subtitle1"
-        textAlign="center"
-        overflow="hidden"
-        noWrap
-        textOverflow="ellipsis"
-        p={0.5}
+    <Box
+      sx={{ color: "white", bgcolor: "#002D62 ", borderRadius: 2 }}
+      boxShadow={4}
+    >
+      <Grid
+        container
+        display="flex"
+        alignItems="center"
+        justifyContent={"space-between"}
       >
-        {name}
-      </Typography>
+        <Grid xs={2}></Grid>
+        <Grid xs={8} display="flex" alignItems="center" justifyContent="center">
+          <Typography
+            variant="subtitle1"
+            textAlign="center"
+            overflow="hidden"
+            noWrap
+            textOverflow="ellipsis"
+            p={0.5}
+          >
+            {name}
+          </Typography>
+        </Grid>
+        <Grid
+          xs={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius={5}
+        >
+          <UploadingIcon
+            sx={{
+              transform: "rotate(360deg)",
+              fontSize: 18,
+              cursor: "pointer",
+            }}
+          />
+        </Grid>
+      </Grid>
     </Box>
   );
 };
@@ -49,7 +81,8 @@ const FilesComponent = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("Dropped");
+
+    setEntered(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       // handleFiles(e.dataTransfer.files);
@@ -82,14 +115,41 @@ const FilesComponent = () => {
       height={250}
       bgcolor="#e1f1fd"
     >
-      <Box width="100%" py={0.5}>
-        <Typography
-          textAlign="center"
-          color="gray"
-          variant={entered ? "h4" : "body1"}
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        width="100%"
+        pb={1}
+      >
+        <Grid
+          container
+          display="flex"
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
         >
-          {entered ? "Drop it!!!" : "Drag & Drop"}
-        </Typography>
+          <Grid xs={4}>
+            <TextFieldBorderless
+              value=""
+              onChange={() => {}}
+              placeholder="Search..."
+              sx={{ bgColor: "white" }}
+              underline
+            />
+          </Grid>
+          <Grid xs={4} display="flex" justifyContent="center">
+            <Chip
+              size="small"
+              label={entered ? "Drop it!" : "Drop Zone"}
+              sx={{
+                color: "white",
+                bgcolor: "grey.700",
+              }}
+            />
+          </Grid>
+          <Grid xs={4}></Grid>
+        </Grid>
       </Box>
       <Box
         display="flex"
@@ -114,27 +174,27 @@ const FilesComponent = () => {
           fileNames={[
             "File -  1",
             "Files s  - 2",
-            "Fiasd lad - 3",
-            "asdsdfsdf-4",
-            "File -  1",
-            "Files s  - 2",
-            "Fiasd lad - 3",
-            "asdsdfsdf-4",
-            "Files s  - 2",
-            "Fiasd lad - 3",
-            "Files s  - 2",
-            "Fiasd lad - 3",
-            "asdsdfsdf-4",
-            "Files s  - 2",
-            "Fiasd lad - 3",
-            "asdsdfsdf-4",
-            "Files s  - 2",
-            "Fiasd lad - 3",
-            "Files s  - 2",
-            "Fiasd lad - 3",
+            // "Fiasd lad - 3",
+            // "asdsdfsdf-4",
+            // "File -  1",
+            // "Files s  - 2",
+            // "Fiasd lad - 3",
+            // "asdsdfsdf-4",
+            // "Files s  - 2",
+            // "Fiasd lad - 3",
+            // "Files s  - 2",
+            // "Fiasd lad - 3",
+            // "asdsdfsdf-4",
+            // "Files s  - 2",
+            "Fiasd ladFiasd ladFiasd ladFiasd ladFiasd lad - 3",
             "asdsdfsdf-4",
             "Files s  - 2",
             "Fiasd lad - 3",
+            "Files s  - 2",
+            // "Fiasd lad - 3",
+            // "asdsdfsdf-4",
+            // "Files s  - 2",
+            // "Fiasd lad - 3",
           ]}
         />
       </Box>

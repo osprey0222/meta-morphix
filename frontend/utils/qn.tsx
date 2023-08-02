@@ -3,13 +3,15 @@ import { DateISO } from "../types/dayPlanner.types";
 
 export const getStringifiedHistory = (data: { [key: DateISO]: string }) => {
   const sorted_keys = Object.keys(data).sort((a, b) =>
-    new Date(a) > new Date(b) ? 0 : -1
+    new Date(a) > new Date(b) ? -1 : 0
   );
 
   let updatedData = "";
   sorted_keys.forEach((key: string) => {
     updatedData += data[key]
-      ? `\n${moment(key).format("DD MMMM YYYY")}:\n\n${data[key]}\n\n`
+      ? `\n----------------------- ${moment(key).format(
+          "DD MMM, YYYY"
+        )} ----------------------\n\n${data[key]}\n\n`
       : "";
   });
 
