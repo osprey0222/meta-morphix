@@ -3,11 +3,13 @@ const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
 const en = require("./utils/constants");
 require("dotenv").config();
+const { initializeApp } = require("firebase/app");
 
 // routers
 const userRoutes = require("./routes/userRoutes");
 const dayPlanRoutes = require("./routes/dayPlannerRoutes");
 const qnRoutes = require("./routes/quickNoteRoutes");
+const filesRoutes = require("./routes/filesRoutes");
 
 // express
 const app = express();
@@ -39,3 +41,4 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use("/users", userRoutes);
 app.use("/dayPlan", dayPlanRoutes);
 app.use("/quickNote", qnRoutes);
+app.use("/files", filesRoutes);

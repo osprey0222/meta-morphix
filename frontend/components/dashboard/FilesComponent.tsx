@@ -1,10 +1,11 @@
 import { Box, Chip, Grid, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextFieldBorderless } from "../fields/TextField";
 // import DownloadIcon from "@mui/icons-material/CloudDownloadRounded";
 import DownloadIcon from "@mui/icons-material/FileDownloadRounded";
 import UploadingIcon from "@mui/icons-material/DownloadingRounded";
 import { File as FileType } from "buffer";
+import axios from "axios";
 
 const File = (props: FileProps) => {
   const { name } = props;
@@ -86,14 +87,26 @@ const FilesComponent = () => {
 
     setEntered(false);
 
+    const data = new FormData();
+
     const files_temp = [...files];
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const files = e.dataTransfer.files;
+      const files: { [key: number]: Blob | FileType; length: number } =
+        e.dataTransfer.files;
+
       for (let file_index = 0; file_index < files.length; file_index++) {
-        files_temp.push(files[file_index]);
+        files_temp.push(files[file_index] as FileType);
+
+        // FormData
+        data.append("file", files[file_index] as Blob, files[file_index].name);
       }
+      axios.post("", data, {
+        onUploadProgress: (ProgressEvent) => {
+          console.log("Loading");
+        },
+      });
     }
-    console.log(files_temp);
+
     setFiles(files_temp);
   };
 

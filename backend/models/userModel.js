@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const { File } = require("./fileModel");
+const { ObjectId } = require("mongodb");
 const Schema = mongoose.Schema;
 
 const Tag = new Schema({
@@ -43,6 +45,10 @@ const UserSchema = new Schema(
     },
     tags: {
       type: [Tag],
+      default: [],
+    },
+    files: {
+      type: [ObjectId],
       default: [],
     },
   },

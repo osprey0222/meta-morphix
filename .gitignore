@@ -38,6 +38,7 @@ Private
 #Backend
 
 /backend/node_modules
+/backend/uploads
 
 # local env files
 /backend/.env
