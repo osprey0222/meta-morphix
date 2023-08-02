@@ -4,6 +4,7 @@ import { TextFieldBorderless } from "../fields/TextField";
 // import DownloadIcon from "@mui/icons-material/CloudDownloadRounded";
 import DownloadIcon from "@mui/icons-material/FileDownloadRounded";
 import UploadingIcon from "@mui/icons-material/DownloadingRounded";
+import { File as FileType } from "buffer";
 
 const File = (props: FileProps) => {
   const { name } = props;
@@ -56,11 +57,11 @@ interface FileProps {
 }
 
 const Files = (props: FilesProps) => {
-  const { fileNames } = props;
+  const { files } = props;
   return (
     <Grid container spacing={2}>
       <Grid container item spacing={1.5}>
-        {fileNames.map((name) => (
+        {files.map(({ name, type }) => (
           <Grid item xs={4}>
             <File name={name} />
           </Grid>
@@ -72,11 +73,12 @@ const Files = (props: FilesProps) => {
 
 interface FilesProps {
   isLoading: boolean;
-  fileNames: string[];
+  files: FileType[];
 }
 
 const FilesComponent = () => {
   const [entered, setEntered] = useState(false);
+  const [files, setFiles] = useState<FileType[]>([]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -84,10 +86,15 @@ const FilesComponent = () => {
 
     setEntered(false);
 
+    const files_temp = [...files];
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      // handleFiles(e.dataTransfer.files);
-      console.log(e.dataTransfer.files);
+      const files = e.dataTransfer.files;
+      for (let file_index = 0; file_index < files.length; file_index++) {
+        files_temp.push(files[file_index]);
+      }
     }
+    console.log(files_temp);
+    setFiles(files_temp);
   };
 
   const handleDrag = (e) => {
@@ -169,34 +176,19 @@ const FilesComponent = () => {
         overflow="scroll"
         p={1}
       >
-        <Files
-          isLoading
-          fileNames={[
-            "File -  1",
-            "Files s  - 2",
-            // "Fiasd lad - 3",
-            // "asdsdfsdf-4",
-            // "File -  1",
-            // "Files s  - 2",
-            // "Fiasd lad - 3",
-            // "asdsdfsdf-4",
-            // "Files s  - 2",
-            // "Fiasd lad - 3",
-            // "Files s  - 2",
-            // "Fiasd lad - 3",
-            // "asdsdfsdf-4",
-            // "Files s  - 2",
-            "Fiasd ladFiasd ladFiasd ladFiasd ladFiasd lad - 3",
-            "asdsdfsdf-4",
-            "Files s  - 2",
-            "Fiasd lad - 3",
-            "Files s  - 2",
-            // "Fiasd lad - 3",
-            // "asdsdfsdf-4",
-            // "Files s  - 2",
-            // "Fiasd lad - 3",
-          ]}
-        />
+        {files.length ? (
+          <Files isLoading files={files || []} />
+        ) : (
+          <Typography
+            justifyContent="center"
+            alignSelf="center"
+            textAlign="center"
+            color="grey.600"
+            variant="caption"
+          >
+            Why so empty?
+          </Typography>
+        )}
       </Box>
     </Box>
   );
