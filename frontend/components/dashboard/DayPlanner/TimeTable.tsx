@@ -17,6 +17,8 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { TT } from "../../../constants/general";
+import { tags } from "../../../utils/sampleData";
+import { randomInt } from "crypto";
 
 const Time = (props: {
   time: Dayjs | string;
@@ -249,7 +251,12 @@ const TimeTable = ({ data: timeTableData }: { data: TimeTable[] }) => {
                 }}
                 disabled={complete}
               />
-              {tag && <Tag TT_index={index} tag={tag} />}
+              {true && (
+                <Tag
+                  TT_index={index}
+                  tag={tags[Math.floor(Math.random() * (tags.length - 1))]}
+                />
+              )}
             </Box>
           </Box>
         ))}
