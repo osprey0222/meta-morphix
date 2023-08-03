@@ -39,7 +39,7 @@ const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <QueryClientProvider client={new QueryClient({})}>
+      <QueryClientProvider client={new QueryClient()}>
         <CssBaseline />
         <ToastContainer position="top-right" theme="dark" />
         <AuthWrapper>

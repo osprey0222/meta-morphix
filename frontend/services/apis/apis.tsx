@@ -36,3 +36,10 @@ export function PATCH<Payload, Response>(
 ): Promise<Response> {
   return axiosInstance.patch(url, data, { headers }).then((res) => res.data);
 }
+
+export function DELETE<Payload, Response>(
+  url: string,
+  headers?: AxiosHeaders
+): Promise<Response> {
+  return axiosInstance.delete(url, { headers }).then((res) => res.data);
+}

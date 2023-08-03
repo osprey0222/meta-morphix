@@ -68,7 +68,7 @@ const uploadUserFile = asyncHandler(async (req, res) => {
   req.user.save();
 
   res.json({
-    data: { name, type, size, downloadURL },
+    data: { id: newFile.id, name, type, size, downloadURL },
     status: 200,
     message: "Upload File Successfully",
   });
@@ -78,10 +78,8 @@ const deleteUserFile = asyncHandler(async (req, res) => {
   const { fileId } = req.params;
 
   // Delete from Mongo
-  const upadatedFiles = await File.findOneAndDelete(
-    { _id: fileId },
-    { new: true }
-  );
+  await File.findOneAndDelete({ _id: fileId }, { new: true });
+  const upadatedFiles = await File.find({});
 
   // Delete from Firebase
   const storageRef = ref(storage, `files/${req.user.id}/${fileId}`);

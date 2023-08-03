@@ -13,6 +13,10 @@ export const API_ROUTES = {
   // quicknote
   getQN: "/quickNote",
   updateQN: "/quickNote/:dateISO",
+  // files
+  getFiles: "/users/user/files",
+  uploadFile: "/users/user/file",
+  deleteFile: "/users/user/file/:fileId",
 };
 
 export const ROUTES = {

@@ -1,16 +1,26 @@
 import { Box, Chip, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TextFieldBorderless } from "../fields/TextField";
-// import DownloadIcon from "@mui/icons-material/CloudDownloadRounded";
-// import DeleteIcon from "@mui/icons-material/CancelRounded";
 import DeleteIcon from "@mui/icons-material/RemoveCircleRounded";
-import UploadingIcon from "@mui/icons-material/DownloadingRounded";
-import { File as FileType } from "buffer";
-import axios from "axios";
+import {
+  useDeleteFile,
+  useGetAllFiles,
+  useUploadFile,
+} from "../../hooks/files.hooks";
+import { FileDB, FileDB_ } from "../../types/files.types";
+import { toast } from "react-toastify";
+import { handleDownload } from "../../services/files.services";
 
 const File = (props: FileProps) => {
-  const { name } = props;
+  const {
+    index,
+    removeFile,
+    file: { id: fileId, name, downloadURL } = {},
+  } = props;
   const [showDelete, setShowDelete] = useState(false);
+
+  const { mutate: deleteFile } = useDeleteFile();
+
   return (
     <Box
       sx={{
@@ -23,6 +33,7 @@ const File = (props: FileProps) => {
       boxShadow={4}
       onPointerEnter={() => setShowDelete(true)}
       onPointerLeave={() => setShowDelete(false)}
+      onClick={() => handleDownload(downloadURL)}
     >
       <Typography
         variant="subtitle1"
@@ -48,7 +59,10 @@ const File = (props: FileProps) => {
             cursor: "pointer",
             borderRadius: "100%",
           }}
-          onClick={() => null}
+          onClick={() => {
+            removeFile(index);
+            deleteFile({ fileId });
+          }}
         />
       )}
     </Box>
@@ -56,17 +70,19 @@ const File = (props: FileProps) => {
 };
 
 interface FileProps {
-  name: string;
+  file: FileDB_;
+  index: number;
+  removeFile: (i: number) => void;
 }
 
 const Files = (props: FilesProps) => {
-  const { files } = props;
+  const { files, removeFile } = props;
   return (
     <Grid container spacing={2}>
       <Grid container item spacing={1.5}>
-        {files.map(({ name, type }) => (
+        {files.map((file, index) => (
           <Grid item xs={4}>
-            <File name={name} />
+            <File file={file} index={index} removeFile={removeFile} />
           </Grid>
         ))}
       </Grid>
@@ -76,12 +92,23 @@ const Files = (props: FilesProps) => {
 
 interface FilesProps {
   isLoading: boolean;
-  files: FileType[];
+  files: FileDB_[];
+  removeFile: (index: number) => void;
 }
 
 const FilesComponent = () => {
   const [entered, setEntered] = useState(false);
-  const [files, setFiles] = useState<FileType[]>([]);
+  const [files, setFiles] = useState<any[]>([]);
+
+  // Upload File
+  const { mutate: upload } = useUploadFile();
+
+  // Fetch Files
+  const { data } = useGetAllFiles();
+
+  useEffect(() => {
+    setFiles(data);
+  }, [data]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -89,26 +116,24 @@ const FilesComponent = () => {
 
     setEntered(false);
 
-    const data = new FormData();
+    if (e.dataTransfer.files?.length > 10) {
+      toast.error("Woah! Slow down. Max 10 files at a time.");
+      return;
+    }
 
     const files_temp = [...files];
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const files: { [key: number]: Blob | FileType; length: number } =
+    if (e.dataTransfer.files) {
+      const files: { [key: number]: any; length: number } =
         e.dataTransfer.files;
 
       for (let file_index = 0; file_index < files.length; file_index++) {
-        files_temp.push(files[file_index] as FileType);
-
         // FormData
-        data.append("file", files[file_index] as Blob, files[file_index].name);
+        const data = new FormData();
+        data.append("file", files[file_index] as Blob);
+        upload({ payload: data });
+        files_temp.push({ ...files[file_index] } as any);
       }
-      axios.post("", data, {
-        onUploadProgress: (ProgressEvent) => {
-          console.log("Loading");
-        },
-      });
     }
-
     setFiles(files_temp);
   };
 
@@ -121,6 +146,12 @@ const FilesComponent = () => {
     } else if (e.type === "dragleave") {
       setEntered(false);
     }
+  };
+
+  const handleDelete = (index: number) => {
+    const updatedFiles = [...files];
+    updatedFiles.splice(index, 1);
+    setFiles(updatedFiles);
   };
 
   return (
@@ -192,7 +223,7 @@ const FilesComponent = () => {
         p={1}
       >
         {files.length ? (
-          <Files isLoading files={files || []} />
+          <Files isLoading files={files || []} removeFile={handleDelete} />
         ) : (
           <Typography
             justifyContent="center"
