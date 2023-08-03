@@ -6,13 +6,11 @@ const File = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
-    type: {
-      type: String,
-    },
-    link: {
-      type: String,
-    },
+    type: { type: String },
+    size: { type: Number },
+    downloadURL: { type: String, required: true },
   },
   { timestamps: true, versionKey: false }
 ).set("toJSON", {
