@@ -216,7 +216,7 @@ const Streak = () => {
         justifyContent="center"
         border="0.5px gray solid"
         borderRadius={5}
-        py={2}
+        pt={2}
         height="100%"
         maxWidth={500}
         borderColor="#e0e0e0"
@@ -228,6 +228,9 @@ const Streak = () => {
           sx={{ width: "30%", bgcolor: "warning.main", color: "white" }}
         />
         <TimeTable />
+        <Typography color="grey.500" variant="caption">
+          Feature Coming Soon...
+        </Typography>
       </Box>
     </Box>
   );

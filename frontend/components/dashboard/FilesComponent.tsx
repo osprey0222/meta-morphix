@@ -2,53 +2,55 @@ import { Box, Chip, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TextFieldBorderless } from "../fields/TextField";
 // import DownloadIcon from "@mui/icons-material/CloudDownloadRounded";
-import DownloadIcon from "@mui/icons-material/FileDownloadRounded";
+// import DeleteIcon from "@mui/icons-material/CancelRounded";
+import DeleteIcon from "@mui/icons-material/RemoveCircleRounded";
 import UploadingIcon from "@mui/icons-material/DownloadingRounded";
 import { File as FileType } from "buffer";
 import axios from "axios";
 
 const File = (props: FileProps) => {
   const { name } = props;
+  const [showDelete, setShowDelete] = useState(false);
   return (
     <Box
-      sx={{ color: "white", bgcolor: "#002D62 ", borderRadius: 2 }}
+      sx={{
+        position: "relative",
+        color: "white",
+        bgcolor: "#002D62 ",
+        borderRadius: 2,
+        cursor: "pointer",
+      }}
       boxShadow={4}
+      onPointerEnter={() => setShowDelete(true)}
+      onPointerLeave={() => setShowDelete(false)}
     >
-      <Grid
-        container
-        display="flex"
-        alignItems="center"
-        justifyContent={"space-between"}
+      <Typography
+        variant="subtitle1"
+        textAlign="center"
+        overflow="hidden"
+        noWrap
+        textOverflow="ellipsis"
+        p={0.5}
+        mx={1}
       >
-        <Grid xs={2}></Grid>
-        <Grid xs={8} display="flex" alignItems="center" justifyContent="center">
-          <Typography
-            variant="subtitle1"
-            textAlign="center"
-            overflow="hidden"
-            noWrap
-            textOverflow="ellipsis"
-            p={0.5}
-          >
-            {name}
-          </Typography>
-        </Grid>
-        <Grid
-          xs={2}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          borderRadius={5}
-        >
-          <UploadingIcon
-            sx={{
-              transform: "rotate(360deg)",
-              fontSize: 18,
-              cursor: "pointer",
-            }}
-          />
-        </Grid>
-      </Grid>
+        {name}
+      </Typography>
+
+      {showDelete && (
+        <DeleteIcon
+          sx={{
+            position: "absolute",
+            color: "error.dark",
+            background: "white",
+            fontSize: 14,
+            top: -5,
+            right: -5,
+            cursor: "pointer",
+            borderRadius: "100%",
+          }}
+          onClick={() => null}
+        />
+      )}
     </Box>
   );
 };
