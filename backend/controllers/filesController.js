@@ -11,13 +11,13 @@ const { File } = require("../models/fileModel");
 const { ObjectId } = require("mongodb");
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCRP7bfIFcq7ZtjABdtUER_O084s7ExKc4",
-  authDomain: "x-metamorphix-x.firebaseapp.com",
-  projectId: "x-metamorphix-x",
-  storageBucket: "x-metamorphix-x.appspot.com",
-  messagingSenderId: "417745673148",
-  appId: "1:417745673148:web:f2d8294a58dc5d0484e9b9",
-  measurementId: "G-B24PCDGKG4",
+  apiKey: process.env.FB_API_KEY,
+  authDomain: process.env.FB_AUTH_DOMAIN,
+  projectId: process.env.FB_PROJECT_ID,
+  storageBucket: process.env.FB_STORAGE_BUCKET,
+  messagingSenderId: process.env.FB_MESSAGING_SENDER_ID,
+  appId: process.env.FB_APP_ID,
+  measurementId: process.env.FB_MEASUREMENT_ID,
 };
 initializeApp(firebaseConfig);
 const storage = getStorage();
