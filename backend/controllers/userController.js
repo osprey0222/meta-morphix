@@ -37,6 +37,10 @@ const registerUser = asyncHandler(async (req, res) => {
   const saltRounds = await bcrypt.genSalt(10);
   const h_password = await bcrypt.hash(password, saltRounds);
 
+  const verificationCode = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
+
   // Create user
   const user = await User.create({
     fName,
@@ -44,7 +48,11 @@ const registerUser = asyncHandler(async (req, res) => {
     dob,
     email,
     password: h_password,
+    verificationCode,
+    verified: false,
   });
+
+  sendVerificationMail(email, verificationCode);
 
   if (user) {
     res.status(200).json({
@@ -89,6 +97,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error(en.user.notFound);
   } else if (!user.verified) {
     res.status(401).json({ status: 401, message: en.user.notVerified });
+    sendVerificationMail(email, user.verificationCode.toString());
     throw new Error(en.user.notVerified);
   }
 
@@ -108,21 +117,8 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @GET
 // Send verification email
-const sendVerificationMail = asyncHandler(async (req, res) => {
-  const { email } = req.body.data;
-
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    res.status(404).json({
-      status: 404,
-      message: en.user.notFound,
-    });
-    throw new Error(en.user.notFound);
-  }
-
+const sendVerificationMail = (email, code) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -135,35 +131,17 @@ const sendVerificationMail = asyncHandler(async (req, res) => {
     from: process.env.NODEMAILER_EMAIL,
     to: email,
     subject: "[Email-Verification] Metamorphix",
-    text: `<url-for-UI-that-will-call-verification-api>/?email=${email}`,
+    text: code,
   };
 
-  transporter.sendMail(options, (err, info) => {
-    if (err) {
-      console.log(en.mailer.failed);
-      res.status(400).json({
-        status: 400,
-        message: en.mailer.failed,
-      });
-      console.log(err);
-      throw new Error(en.mailer.failed);
-    } else {
-      res.status(200).json({
-        status: 400,
-        message: en.mailer.success,
-        info,
-      });
-
-      console.log(en.mailer.success);
-      console.log(info);
-    }
-  });
-});
+  // send mail
+  transporter.sendMail(options);
+};
 
 // @GET
 // Verify user
-const verifyUserEmail = asyncHandler(async (req, res) => {
-  const { email } = req.query;
+const verifyUser = asyncHandler(async (req, res) => {
+  const { email, code } = req.query;
 
   const user = await User.findOne({ email });
 
@@ -173,6 +151,14 @@ const verifyUserEmail = asyncHandler(async (req, res) => {
       message: en.user.notFound,
     });
     throw new Error(en.user.notFound);
+  }
+
+  if (user.verificationCode.toString() !== code) {
+    res.status(401).json({
+      status: 401,
+      message: en.user.incorrectCode,
+    });
+    throw new Error(en.user.incorrectCode);
   }
 
   user.verified = true;
@@ -191,8 +177,7 @@ const generateToken = (id) => {
 
 module.exports = {
   getUserInfo,
-  sendVerificationMail,
   registerUser,
   loginUser,
-  verifyUserEmail,
+  verifyUser,
 };

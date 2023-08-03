@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
-const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcrypt");
-
+const { File } = require("./fileModel");
+const { ObjectId } = require("mongodb");
 const Schema = mongoose.Schema;
+
+const Tag = new Schema({
+  label: { type: String, unique: true },
+  color: { type: String },
+});
 
 const UserSchema = new Schema(
   {
@@ -27,9 +31,25 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    verificationCode: {
+      type: Number,
+      reqquired: false,
+    },
     verified: {
       type: Boolean,
       default: false,
+    },
+    dayPlans: {
+      type: Object,
+      default: [],
+    },
+    tags: {
+      type: [Tag],
+      default: [],
+    },
+    files: {
+      type: [ObjectId],
+      default: [],
     },
   },
   { timestamps: true, versionKey: false }
@@ -38,4 +58,4 @@ const UserSchema = new Schema(
   versionKey: false,
 });
 
-module.exports.User = mongoose.model("User", UserSchema);
+module.exports = { User: mongoose.model("User", UserSchema) };
