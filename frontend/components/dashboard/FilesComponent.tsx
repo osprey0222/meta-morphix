@@ -59,7 +59,9 @@ const File = (props: FileProps) => {
             cursor: "pointer",
             borderRadius: "100%",
           }}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
             removeFile(index);
             deleteFile({ fileId });
           }}
@@ -123,18 +125,20 @@ const FilesComponent = () => {
 
     const files_temp = [...files];
     if (e.dataTransfer.files) {
-      const files: { [key: number]: any; length: number } =
-        e.dataTransfer.files;
+      // set files: seperately
+      const files = e.dataTransfer.files;
+      for (let index = 0; index < files.length; index++) {
+        files_temp.push(files[index] as any);
+      }
+      setFiles(files_temp);
 
-      for (let file_index = 0; file_index < files.length; file_index++) {
-        // FormData
+      // hit apis: seperately
+      for (let index = 0; index < files.length; index++) {
         const data = new FormData();
-        data.append("file", files[file_index] as Blob);
+        data.append("file", files[index] as Blob);
         upload({ payload: data });
-        files_temp.push({ ...files[file_index] } as any);
       }
     }
-    setFiles(files_temp);
   };
 
   const handleDrag = (e) => {
